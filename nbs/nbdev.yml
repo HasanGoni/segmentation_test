@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "segmentation_test"
+  site-url: "https://HasanGoni.github.io/segmentation_test"
+  description: "Library for segmentation model"
+  repo-branch: main
+  repo-url: "https://github.com/HasanGoni/segmentation_test"
