@@ -72,4 +72,6 @@ d = { 'settings': { 'branch': 'main',
                                                  'segmentation_test.preprocessing.foo': ( 'core.html#foo',
                                                                                           'segmentation_test/preprocessing.py')},
             'segmentation_test.viz_utils': { 'segmentation_test.viz_utils.show_model': ( 'viz_utils.html#show_model',
+                                                                                         'segmentation_test/viz_utils.py'),
+                                             'segmentation_test.viz_utils.view_image': ( 'viz_utils.html#view_image',
                                                                                          'segmentation_test/viz_utils.py')}}}
