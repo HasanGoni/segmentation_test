@@ -14,6 +14,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import os
+import albumentations as A
+import random
+import cv2
 from fastcore.basics import patch
 from fastcore.all import *
 #from fastai.vision.all import *
@@ -61,26 +64,7 @@ class Preprocess:
                          random_state=42)
 
 
-# %% ../nbs/00_core.ipynb 10
-@patch_to(Preprocess)
-def from_file_to_image(
-                       self,
-                       im_file:str,
-                       one_channel:bool=True
-                       ):
-    image = tf.io.read_file(im_file)
-    image = tf.image.decode_jpeg(image)
-    #print(image.shape)
-    image = tf.image.resize(
-                            image, 
-                            (self.im_height, self.im_width, ))
-    if one_channel:
-        return image
-    else:
-        return tf.image.grayscale_to_rgb(image)
-
-
-# %% ../nbs/00_core.ipynb 12
+# %% ../nbs/00_core.ipynb 11
 @patch_to(Preprocess)
 def show_image(self,im_file):
     #image = self.from_file_to_image(im_file)
@@ -88,9 +72,72 @@ def show_image(self,im_file):
     plt.axis('off')
     plt.show()
 
-# %% ../nbs/00_core.ipynb 14
+# %% ../nbs/00_core.ipynb 12
+@patch_to(Preprocess)
+def read_image(self,im_file, one_channel=False):
+    if one_channel:
+        im = tf.io.read_file(im_file)
+        im = tf.image.decode_png(im, channels=1)
+    else:
+        im = tf.io.read_file(im_file)
+        im = tf.image.decode_png(im, channels=3)
+    return im
+
+# %% ../nbs/00_core.ipynb 15
+@patch_to(Preprocess)
+def augmentation_(
+        self,
+        im_height:int,
+        im_width:int,
+        image:tf.Tensor,
+        mask:tf.Tensor,
+        ):
+    aug = A.Compose([
+    A.OneOf([
+        A.RandomSizedCrop(min_max_height=(250, 250), height=im_height, width=im_width, p=0.5),
+        A.PadIfNeeded(
+                      #min_height=im_height,
+                     # min_width=im_width,
+                        p=0.5)
+    ], p=1),    
+    A.HorizontalFlip(p=0.5),              
+    A.VerticalFlip(p=0.5),              
+    A.RandomRotate90(p=0.5),
+    A.Transpose(p=0.5),
+    A.OneOf([
+        A.ElasticTransform(alpha=120, sigma=120 * 0.05, alpha_affine=120 * 0.03, p=0.5),
+        A.GridDistortion(p=0.5),
+        A.OpticalDistortion(distort_limit=2, shift_limit=0.5, p=1)                  
+        ], p=0.8),
+    #A.CLAHE(p=0.8),
+    A.RandomBrightnessContrast(p=0.8),    
+    A.RandomGamma(p=0.8)])
+    aug_data = aug(image=image.numpy(), mask=mask.numpy())
+    image, mask = aug_data['image'], aug_data['mask']
+    #mask = tf.expand_dims(mask, axis=-1)
+    return image, mask
+
+# %% ../nbs/00_core.ipynb 17
+@patch_to(Preprocess)
+def read_aug(
+            self,
+            im_file:str,
+            lbl_file:str,
+            one_channel:bool=False, 
+            aug:bool=False):
+    img = self.read_image(im_file=im_file, one_channel=one_channel)
+    mask = self.read_image(im_file=lbl_file, one_channel=one_channel)
+    if aug:
+        return self.augmentation_(im_height=img.shape[1], im_width=img.shape[0], image=img, mask=mask)
+    else:
+        return img, mask
+
+# %% ../nbs/00_core.ipynb 20
 @ patch_to(Preprocess)
-def normalize(self, image, min=0):
+def normalize(
+              self,
+              image:Union[np.ndarray, tf.Tensor], 
+              min=0):
     def _normalize(im):
         img = tf.cast(im, tf.float32)
         return img / 255.0
@@ -100,70 +147,99 @@ def normalize(self, image, min=0):
     else:
         return (_normalize(image) * 2.0) -1.0
 
-# %% ../nbs/00_core.ipynb 16
+# %% ../nbs/00_core.ipynb 22
 @ patch_to(Preprocess)
-def process_image_file(
-                       self,
-                       im_file:str,
-                       norm:bool=True,
-                       one_channel=False
-                       ):
-    image = self.from_file_to_image(im_file, one_channel=one_channel)
-    if norm:
-        image = self.normalize(image)
-    if one_channel:
-        image = tf.reshape(image, (self.im_height, self.im_width, 1,))
-    else:
-        image = tf.reshape(image, (self.im_height, self.im_width, 3,))
-    return image
-
-# %% ../nbs/00_core.ipynb 18
-@ patch_to(Preprocess)
-def process_image_and_label(
+def process_image_and_mask(
                        self,
                        im_file:str,
                        lbl_file:str,
-                       norm:bool=True
+                       norm:bool=True,
+                       one_channel:bool=False,
+                       aug_data:bool=True
                        ):
-    return self.process_image_file(im_file, norm=norm, one_channel=self.one_channel), self.process_image_file(lbl_file, norm=norm, one_channel=self.one_channel) 
+    image,mask = self.read_aug(im_file, lbl_file, one_channel=one_channel, aug=aug_data)
+    image, mask = tf.image.resize(image, (self.im_height, self.im_width)), tf.image.resize(mask, (self.im_height, self.im_width))
+    if norm:
+        image = self.normalize(image)
+        mask = self.normalize(mask)
+    if one_channel:
+        image = tf.reshape(image, (self.im_height, self.im_width, 1,))
+        mask = tf.reshape(mask, (self.im_height, self.im_width, 1,))
+    else:
+        image = tf.reshape(image, (self.im_height, self.im_width, 3,))
+        mask = tf.reshape(mask, (self.im_height, self.im_width, 3,))
+    return image,mask
 
-# %% ../nbs/00_core.ipynb 21
+# %% ../nbs/00_core.ipynb 27
+@ patch_to(Preprocess)
+def process_data(
+                 self,
+                 image,
+                 label,
+                 norm:bool=True,
+                 one_channel:bool=False,
+                 aug_data:bool=True):
+    #@tf.function
+    aug_img, aug_lbl = tf.numpy_function(func=self.process_image_and_mask, inp=[image, label, norm, one_channel, aug_data], Tout=(tf.float32, tf.float32))
+    return aug_img, aug_lbl
+
+# %% ../nbs/00_core.ipynb 28
+@patch_to(Preprocess)
+def set_shapes(
+              self,
+              img, 
+              label, 
+              img_shape):
+    img.set_shape(img_shape)
+    label.set_shape(img_shape)
+    return img, label
+
+# %% ../nbs/00_core.ipynb 29
 @patch_to(Preprocess)
 def create_dataset(
                   self,
                   images, labels,
-                  train:bool=True
+                  train:bool=True,
+                  norm:bool=True,
+                  aug:bool=True
                   ):
     _dataset = tf.data.Dataset.from_tensor_slices((images, labels))
-    _dataset = _dataset.map(
-                            self.process_image_and_label, 
-                            num_parallel_calls=tf.data.AUTOTUNE
-                            )
+    _dataset = _dataset.map(partial(self.process_data, aug_data=aug, norm=norm), num_parallel_calls=tf.data.AUTOTUNE)
+    
+    if self.one_channel:
+        _dataset = _dataset.map(partial(self.et_shapes, img_shape=(self.im_height, self.im_width, 1)), num_parallel_calls=tf.data.AUTOTUNE)
+    else:
+        _dataset = _dataset.map(partial(self.set_shapes, img_shape=(self.im_height, self.im_width, 3)), num_parallel_calls=tf.data.AUTOTUNE)
     if train:
         return  _dataset\
-               .cache()\
-               .shuffle(
-                        self.bf_size,
-                        reshuffle_each_iteration=True)\
-               .batch(self.bs)\
-               .repeat()\
-               .prefetch(buffer_size=tf.data.AUTOTUNE)
+                   .cache()\
+                   .shuffle(
+                            self.bf_size,
+                            reshuffle_each_iteration=True)\
+                   .batch(self.bs)\
+                   .repeat()\
+                   .prefetch(buffer_size=tf.data.AUTOTUNE)
     else:
+        #_dataset = _dataset.map(self.process_image_and_mask, num_parallel_calls=tf.data.AUTOTUNE)
         return  _dataset.batch(self.bs).repeat()
 
 
-# %% ../nbs/00_core.ipynb 23
+# %% ../nbs/00_core.ipynb 30
 @patch_to(Preprocess)
 def create_train_test_dataset(self):
     self.train_dataset = self.create_dataset(
                                             images=self.train_images, 
                                             labels=self.train_labels,
+                                            norm=True,
+                                            aug=True,
                                             train=True)
     self.test_dataset = self.create_dataset(
-                                           self.test_images,
-                                           self.test_labels,
+                                           images=self.test_images,
+                                           labels=self.test_labels,
+                                           norm=True,
+                                           aug=False,
                                            train=False)
     return self.train_dataset, self.test_dataset
 
-# %% ../nbs/00_core.ipynb 27
+# %% ../nbs/00_core.ipynb 33
 def foo(): pass
