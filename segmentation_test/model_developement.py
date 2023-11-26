@@ -17,6 +17,7 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 from fastcore.basics import patch
 from fastcore.all import *
+from tensorflow.keras.models import Model
 from IPython.display import display, clear_output
 #from fastai.vision.all import *
 from dataclasses import dataclass, field
