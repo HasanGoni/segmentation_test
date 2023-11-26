@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://HasanGoni.github.io/segmentation_test/tf_model_creation.html</loc>
+    <lastmod>2023-11-26T20:27:41.190Z</lastmod>
+  </url>
+  <url>
+    <loc>https://HasanGoni.github.io/segmentation_test/05_pytorch_ds_creation.html</loc>
+    <lastmod>2023-11-26T20:27:39.938Z</lastmod>
+  </url>
+  <url>
+    <loc>https://HasanGoni.github.io/segmentation_test/core.html</loc>
+    <lastmod>2023-11-26T20:27:39.038Z</lastmod>
+  </url>
+  <url>
+    <loc>https://HasanGoni.github.io/segmentation_test/index.html</loc>
+    <lastmod>2023-11-26T20:27:38.262Z</lastmod>
+  </url>
+  <url>
+    <loc>https://HasanGoni.github.io/segmentation_test/model_developement.html</loc>
+    <lastmod>2023-11-26T20:27:37.286Z</lastmod>
+  </url>
+  <url>
+    <loc>https://HasanGoni.github.io/segmentation_test/confg.html</loc>
+    <lastmod>2023-11-26T20:27:38.606Z</lastmod>
+  </url>
+  <url>
+    <loc>https://HasanGoni.github.io/segmentation_test/metrics_and_loss.html</loc>
+    <lastmod>2023-11-26T20:27:39.374Z</lastmod>
+  </url>
+  <url>
+    <loc>https://HasanGoni.github.io/segmentation_test/viz_utils.html</loc>
+    <lastmod>2023-11-26T20:27:40.238Z</lastmod>
+  </url>
+</urlset>

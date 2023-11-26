@@ -1,0 +1,1748 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Segmentaion tools will be developed here">
+
+<title>segmentation_test - Segmentation related functions will be developed here</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="segmentation_test - Segmentation related functions will be developed here">
+<meta property="og:description" content="Segmentaion tools will be developed here">
+<meta property="og:site-name" content="segmentation_test">
+<meta name="twitter:title" content="segmentation_test - Segmentation related functions will be developed here">
+<meta name="twitter:description" content="Segmentaion tools will be developed here">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">segmentation_test</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/HasanGoni/segmentation_test" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Segmentation related functions will be developed here</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Segmentation related functions will be developed here</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./core.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">core</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./confg.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Config</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./model_developement.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model Developement</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./viz_utils.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Visulization utility</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./metrics_and_loss.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Metrics and loss</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_pytorch_ds_creation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">05_pytorch_ds_creation.html</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tf_model_creation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Creating different Unet models in tensorflow</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#install" id="toc-install" class="nav-link active" data-scroll-target="#install">Install</a></li>
+  <li><a href="#how-to-use" id="toc-how-to-use" class="nav-link" data-scroll-target="#how-to-use">How to use</a></li>
+  <li><a href="#create-a-normal-unet" id="toc-create-a-normal-unet" class="nav-link" data-scroll-target="#create-a-normal-unet">Create a Normal UNet</a></li>
+  <li><a href="#create-a-u-net-with-attention" id="toc-create-a-u-net-with-attention" class="nav-link" data-scroll-target="#create-a-u-net-with-attention">Create a U-Net with Attention</a></li>
+  <li><a href="#create-a-u-net-model-with-attention-gates-and-residual-connections" id="toc-create-a-u-net-model-with-attention-gates-and-residual-connections" class="nav-link" data-scroll-target="#create-a-u-net-model-with-attention-gates-and-residual-connections">Create a U-Net model with attention gates and residual connections</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/HasanGoni/segmentation_test/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Segmentation related functions will be developed here</h1>
+</div>
+
+<div>
+  <div class="description">
+    Segmentaion tools will be developed here
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<section id="install" class="level2">
+<h2 class="anchored" data-anchor-id="install">Install</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone <span class="op">&lt;</span>repo<span class="op">&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-e</span> .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="how-to-use" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-use">How to use</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> segmentation_test.tf_model_creation <span class="im">import</span> <span class="op">*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>2023-11-26 20:19:15.671190: E external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:9261] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+2023-11-26 20:19:15.671221: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:607] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+2023-11-26 20:19:15.671942: E external/local_xla/xla/stream_executor/cuda/cuda_blas.cc:1515] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2023-11-26 20:19:15.677295: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2023-11-26 20:19:16.258260: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>h,w,c <span class="op">=</span> <span class="dv">1152</span>, <span class="dv">1632</span>,<span class="dv">1</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>n_classes <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>filter_list<span class="op">=</span>[<span class="dv">64</span>, <span class="dv">128</span>, <span class="dv">256</span>, <span class="dv">512</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="create-a-normal-unet" class="level2">
+<h2 class="anchored" data-anchor-id="create-a-normal-unet">Create a Normal UNet</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>normal_unet_model <span class="op">=</span> unet_model(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    input_size<span class="op">=</span>(h, w, c),</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    filter_list<span class="op">=</span>filter_list,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    n_classes<span class="op">=</span>n_classes</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(normal_unet_model.summary())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Model: "model_1"
+__________________________________________________________________________________________________
+ Layer (type)                Output Shape                 Param #   Connected to                  
+==================================================================================================
+ input_4 (InputLayer)        [(None, 1152, 1632, 1)]      0         []                            
+                                                                                                  
+ conv2d_21 (Conv2D)          (None, 1152, 1632, 64)       640       ['input_4[0][0]']             
+                                                                                                  
+ batch_normalization_18 (Ba  (None, 1152, 1632, 64)       256       ['conv2d_21[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_18 (Activation)  (None, 1152, 1632, 64)       0         ['batch_normalization_18[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_18 (Dropout)        (None, 1152, 1632, 64)       0         ['activation_18[0][0]']       
+                                                                                                  
+ conv2d_22 (Conv2D)          (None, 1152, 1632, 64)       36928     ['dropout_18[0][0]']          
+                                                                                                  
+ batch_normalization_19 (Ba  (None, 1152, 1632, 64)       256       ['conv2d_22[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_19 (Activation)  (None, 1152, 1632, 64)       0         ['batch_normalization_19[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_19 (Dropout)        (None, 1152, 1632, 64)       0         ['activation_19[0][0]']       
+                                                                                                  
+ max_pooling2d_4 (MaxPoolin  (None, 576, 816, 64)         0         ['dropout_19[0][0]']          
+ g2D)                                                                                             
+                                                                                                  
+ average_pooling2d_4 (Avera  (None, 576, 816, 64)         0         ['dropout_19[0][0]']          
+ gePooling2D)                                                                                     
+                                                                                                  
+ concatenate_8 (Concatenate  (None, 576, 816, 128)        0         ['max_pooling2d_4[0][0]',     
+ )                                                                   'average_pooling2d_4[0][0]'] 
+                                                                                                  
+ conv2d_23 (Conv2D)          (None, 576, 816, 128)        147584    ['concatenate_8[0][0]']       
+                                                                                                  
+ batch_normalization_20 (Ba  (None, 576, 816, 128)        512       ['conv2d_23[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_20 (Activation)  (None, 576, 816, 128)        0         ['batch_normalization_20[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_20 (Dropout)        (None, 576, 816, 128)        0         ['activation_20[0][0]']       
+                                                                                                  
+ conv2d_24 (Conv2D)          (None, 576, 816, 128)        147584    ['dropout_20[0][0]']          
+                                                                                                  
+ batch_normalization_21 (Ba  (None, 576, 816, 128)        512       ['conv2d_24[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_21 (Activation)  (None, 576, 816, 128)        0         ['batch_normalization_21[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_21 (Dropout)        (None, 576, 816, 128)        0         ['activation_21[0][0]']       
+                                                                                                  
+ max_pooling2d_5 (MaxPoolin  (None, 288, 408, 128)        0         ['dropout_21[0][0]']          
+ g2D)                                                                                             
+                                                                                                  
+ average_pooling2d_5 (Avera  (None, 288, 408, 128)        0         ['dropout_21[0][0]']          
+ gePooling2D)                                                                                     
+                                                                                                  
+ concatenate_9 (Concatenate  (None, 288, 408, 256)        0         ['max_pooling2d_5[0][0]',     
+ )                                                                   'average_pooling2d_5[0][0]'] 
+                                                                                                  
+ conv2d_25 (Conv2D)          (None, 288, 408, 256)        590080    ['concatenate_9[0][0]']       
+                                                                                                  
+ batch_normalization_22 (Ba  (None, 288, 408, 256)        1024      ['conv2d_25[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_22 (Activation)  (None, 288, 408, 256)        0         ['batch_normalization_22[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_22 (Dropout)        (None, 288, 408, 256)        0         ['activation_22[0][0]']       
+                                                                                                  
+ conv2d_26 (Conv2D)          (None, 288, 408, 256)        590080    ['dropout_22[0][0]']          
+                                                                                                  
+ batch_normalization_23 (Ba  (None, 288, 408, 256)        1024      ['conv2d_26[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_23 (Activation)  (None, 288, 408, 256)        0         ['batch_normalization_23[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_23 (Dropout)        (None, 288, 408, 256)        0         ['activation_23[0][0]']       
+                                                                                                  
+ max_pooling2d_6 (MaxPoolin  (None, 144, 204, 256)        0         ['dropout_23[0][0]']          
+ g2D)                                                                                             
+                                                                                                  
+ average_pooling2d_6 (Avera  (None, 144, 204, 256)        0         ['dropout_23[0][0]']          
+ gePooling2D)                                                                                     
+                                                                                                  
+ concatenate_10 (Concatenat  (None, 144, 204, 512)        0         ['max_pooling2d_6[0][0]',     
+ e)                                                                  'average_pooling2d_6[0][0]'] 
+                                                                                                  
+ conv2d_27 (Conv2D)          (None, 144, 204, 512)        2359808   ['concatenate_10[0][0]']      
+                                                                                                  
+ batch_normalization_24 (Ba  (None, 144, 204, 512)        2048      ['conv2d_27[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_24 (Activation)  (None, 144, 204, 512)        0         ['batch_normalization_24[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_24 (Dropout)        (None, 144, 204, 512)        0         ['activation_24[0][0]']       
+                                                                                                  
+ conv2d_28 (Conv2D)          (None, 144, 204, 512)        2359808   ['dropout_24[0][0]']          
+                                                                                                  
+ batch_normalization_25 (Ba  (None, 144, 204, 512)        2048      ['conv2d_28[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_25 (Activation)  (None, 144, 204, 512)        0         ['batch_normalization_25[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_25 (Dropout)        (None, 144, 204, 512)        0         ['activation_25[0][0]']       
+                                                                                                  
+ max_pooling2d_7 (MaxPoolin  (None, 72, 102, 512)         0         ['dropout_25[0][0]']          
+ g2D)                                                                                             
+                                                                                                  
+ average_pooling2d_7 (Avera  (None, 72, 102, 512)         0         ['dropout_25[0][0]']          
+ gePooling2D)                                                                                     
+                                                                                                  
+ concatenate_11 (Concatenat  (None, 72, 102, 1024)        0         ['max_pooling2d_7[0][0]',     
+ e)                                                                  'average_pooling2d_7[0][0]'] 
+                                                                                                  
+ conv2d_29 (Conv2D)          (None, 72, 102, 1024)        9438208   ['concatenate_11[0][0]']      
+                                                                                                  
+ batch_normalization_26 (Ba  (None, 72, 102, 1024)        4096      ['conv2d_29[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_26 (Activation)  (None, 72, 102, 1024)        0         ['batch_normalization_26[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_26 (Dropout)        (None, 72, 102, 1024)        0         ['activation_26[0][0]']       
+                                                                                                  
+ conv2d_30 (Conv2D)          (None, 72, 102, 1024)        9438208   ['dropout_26[0][0]']          
+                                                                                                  
+ batch_normalization_27 (Ba  (None, 72, 102, 1024)        4096      ['conv2d_30[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_27 (Activation)  (None, 72, 102, 1024)        0         ['batch_normalization_27[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_27 (Dropout)        (None, 72, 102, 1024)        0         ['activation_27[0][0]']       
+                                                                                                  
+ conv2d_transpose_4 (Conv2D  (None, 144, 204, 512)        2097664   ['dropout_27[0][0]']          
+ Transpose)                                                                                       
+                                                                                                  
+ concatenate_12 (Concatenat  (None, 144, 204, 1024)       0         ['conv2d_transpose_4[0][0]',  
+ e)                                                                  'dropout_25[0][0]']          
+                                                                                                  
+ conv2d_31 (Conv2D)          (None, 144, 204, 512)        4719104   ['concatenate_12[0][0]']      
+                                                                                                  
+ batch_normalization_28 (Ba  (None, 144, 204, 512)        2048      ['conv2d_31[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_28 (Activation)  (None, 144, 204, 512)        0         ['batch_normalization_28[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_28 (Dropout)        (None, 144, 204, 512)        0         ['activation_28[0][0]']       
+                                                                                                  
+ conv2d_32 (Conv2D)          (None, 144, 204, 512)        2359808   ['dropout_28[0][0]']          
+                                                                                                  
+ batch_normalization_29 (Ba  (None, 144, 204, 512)        2048      ['conv2d_32[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_29 (Activation)  (None, 144, 204, 512)        0         ['batch_normalization_29[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_29 (Dropout)        (None, 144, 204, 512)        0         ['activation_29[0][0]']       
+                                                                                                  
+ conv2d_transpose_5 (Conv2D  (None, 288, 408, 256)        524544    ['dropout_29[0][0]']          
+ Transpose)                                                                                       
+                                                                                                  
+ concatenate_13 (Concatenat  (None, 288, 408, 512)        0         ['conv2d_transpose_5[0][0]',  
+ e)                                                                  'dropout_23[0][0]']          
+                                                                                                  
+ conv2d_33 (Conv2D)          (None, 288, 408, 256)        1179904   ['concatenate_13[0][0]']      
+                                                                                                  
+ batch_normalization_30 (Ba  (None, 288, 408, 256)        1024      ['conv2d_33[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_30 (Activation)  (None, 288, 408, 256)        0         ['batch_normalization_30[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_30 (Dropout)        (None, 288, 408, 256)        0         ['activation_30[0][0]']       
+                                                                                                  
+ conv2d_34 (Conv2D)          (None, 288, 408, 256)        590080    ['dropout_30[0][0]']          
+                                                                                                  
+ batch_normalization_31 (Ba  (None, 288, 408, 256)        1024      ['conv2d_34[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_31 (Activation)  (None, 288, 408, 256)        0         ['batch_normalization_31[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_31 (Dropout)        (None, 288, 408, 256)        0         ['activation_31[0][0]']       
+                                                                                                  
+ conv2d_transpose_6 (Conv2D  (None, 576, 816, 128)        131200    ['dropout_31[0][0]']          
+ Transpose)                                                                                       
+                                                                                                  
+ concatenate_14 (Concatenat  (None, 576, 816, 256)        0         ['conv2d_transpose_6[0][0]',  
+ e)                                                                  'dropout_21[0][0]']          
+                                                                                                  
+ conv2d_35 (Conv2D)          (None, 576, 816, 128)        295040    ['concatenate_14[0][0]']      
+                                                                                                  
+ batch_normalization_32 (Ba  (None, 576, 816, 128)        512       ['conv2d_35[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_32 (Activation)  (None, 576, 816, 128)        0         ['batch_normalization_32[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_32 (Dropout)        (None, 576, 816, 128)        0         ['activation_32[0][0]']       
+                                                                                                  
+ conv2d_36 (Conv2D)          (None, 576, 816, 128)        147584    ['dropout_32[0][0]']          
+                                                                                                  
+ batch_normalization_33 (Ba  (None, 576, 816, 128)        512       ['conv2d_36[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_33 (Activation)  (None, 576, 816, 128)        0         ['batch_normalization_33[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_33 (Dropout)        (None, 576, 816, 128)        0         ['activation_33[0][0]']       
+                                                                                                  
+ conv2d_transpose_7 (Conv2D  (None, 1152, 1632, 64)       32832     ['dropout_33[0][0]']          
+ Transpose)                                                                                       
+                                                                                                  
+ concatenate_15 (Concatenat  (None, 1152, 1632, 128)      0         ['conv2d_transpose_7[0][0]',  
+ e)                                                                  'dropout_19[0][0]']          
+                                                                                                  
+ conv2d_37 (Conv2D)          (None, 1152, 1632, 64)       73792     ['concatenate_15[0][0]']      
+                                                                                                  
+ batch_normalization_34 (Ba  (None, 1152, 1632, 64)       256       ['conv2d_37[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_34 (Activation)  (None, 1152, 1632, 64)       0         ['batch_normalization_34[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_34 (Dropout)        (None, 1152, 1632, 64)       0         ['activation_34[0][0]']       
+                                                                                                  
+ conv2d_38 (Conv2D)          (None, 1152, 1632, 64)       36928     ['dropout_34[0][0]']          
+                                                                                                  
+ batch_normalization_35 (Ba  (None, 1152, 1632, 64)       256       ['conv2d_38[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_35 (Activation)  (None, 1152, 1632, 64)       0         ['batch_normalization_35[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_35 (Dropout)        (None, 1152, 1632, 64)       0         ['activation_35[0][0]']       
+                                                                                                  
+ conv2d_39 (Conv2D)          (None, 1152, 1632, 1)        65        ['dropout_35[0][0]']          
+                                                                                                  
+==================================================================================================
+Total params: 37321025 (142.37 MB)
+Trainable params: 37309249 (142.32 MB)
+Non-trainable params: 11776 (46.00 KB)
+__________________________________________________________________________________________________
+None</code></pre>
+</div>
+</div>
+</section>
+<section id="create-a-u-net-with-attention" class="level2">
+<h2 class="anchored" data-anchor-id="create-a-u-net-with-attention">Create a U-Net with Attention</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>attn_unet_model <span class="op">=</span> unet_model_attention_gates(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    input_size<span class="op">=</span>(h, w, c),</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    filter_list<span class="op">=</span>filter_list,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    n_classes<span class="op">=</span>n_classes</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(attn_unet_model.summary())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Model: "model_2"
+__________________________________________________________________________________________________
+ Layer (type)                Output Shape                 Param #   Connected to                  
+==================================================================================================
+ input_5 (InputLayer)        [(None, 1152, 1632, 1)]      0         []                            
+                                                                                                  
+ conv2d_40 (Conv2D)          (None, 1152, 1632, 64)       640       ['input_5[0][0]']             
+                                                                                                  
+ batch_normalization_36 (Ba  (None, 1152, 1632, 64)       256       ['conv2d_40[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_36 (Activation)  (None, 1152, 1632, 64)       0         ['batch_normalization_36[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_36 (Dropout)        (None, 1152, 1632, 64)       0         ['activation_36[0][0]']       
+                                                                                                  
+ conv2d_41 (Conv2D)          (None, 1152, 1632, 64)       36928     ['dropout_36[0][0]']          
+                                                                                                  
+ batch_normalization_37 (Ba  (None, 1152, 1632, 64)       256       ['conv2d_41[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_37 (Activation)  (None, 1152, 1632, 64)       0         ['batch_normalization_37[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_37 (Dropout)        (None, 1152, 1632, 64)       0         ['activation_37[0][0]']       
+                                                                                                  
+ max_pooling2d_8 (MaxPoolin  (None, 576, 816, 64)         0         ['dropout_37[0][0]']          
+ g2D)                                                                                             
+                                                                                                  
+ average_pooling2d_8 (Avera  (None, 576, 816, 64)         0         ['dropout_37[0][0]']          
+ gePooling2D)                                                                                     
+                                                                                                  
+ concatenate_16 (Concatenat  (None, 576, 816, 128)        0         ['max_pooling2d_8[0][0]',     
+ e)                                                                  'average_pooling2d_8[0][0]'] 
+                                                                                                  
+ conv2d_42 (Conv2D)          (None, 576, 816, 128)        147584    ['concatenate_16[0][0]']      
+                                                                                                  
+ batch_normalization_38 (Ba  (None, 576, 816, 128)        512       ['conv2d_42[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_38 (Activation)  (None, 576, 816, 128)        0         ['batch_normalization_38[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_38 (Dropout)        (None, 576, 816, 128)        0         ['activation_38[0][0]']       
+                                                                                                  
+ conv2d_43 (Conv2D)          (None, 576, 816, 128)        147584    ['dropout_38[0][0]']          
+                                                                                                  
+ batch_normalization_39 (Ba  (None, 576, 816, 128)        512       ['conv2d_43[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_39 (Activation)  (None, 576, 816, 128)        0         ['batch_normalization_39[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_39 (Dropout)        (None, 576, 816, 128)        0         ['activation_39[0][0]']       
+                                                                                                  
+ max_pooling2d_9 (MaxPoolin  (None, 288, 408, 128)        0         ['dropout_39[0][0]']          
+ g2D)                                                                                             
+                                                                                                  
+ average_pooling2d_9 (Avera  (None, 288, 408, 128)        0         ['dropout_39[0][0]']          
+ gePooling2D)                                                                                     
+                                                                                                  
+ concatenate_17 (Concatenat  (None, 288, 408, 256)        0         ['max_pooling2d_9[0][0]',     
+ e)                                                                  'average_pooling2d_9[0][0]'] 
+                                                                                                  
+ conv2d_44 (Conv2D)          (None, 288, 408, 256)        590080    ['concatenate_17[0][0]']      
+                                                                                                  
+ batch_normalization_40 (Ba  (None, 288, 408, 256)        1024      ['conv2d_44[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_40 (Activation)  (None, 288, 408, 256)        0         ['batch_normalization_40[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_40 (Dropout)        (None, 288, 408, 256)        0         ['activation_40[0][0]']       
+                                                                                                  
+ conv2d_45 (Conv2D)          (None, 288, 408, 256)        590080    ['dropout_40[0][0]']          
+                                                                                                  
+ batch_normalization_41 (Ba  (None, 288, 408, 256)        1024      ['conv2d_45[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_41 (Activation)  (None, 288, 408, 256)        0         ['batch_normalization_41[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_41 (Dropout)        (None, 288, 408, 256)        0         ['activation_41[0][0]']       
+                                                                                                  
+ max_pooling2d_10 (MaxPooli  (None, 144, 204, 256)        0         ['dropout_41[0][0]']          
+ ng2D)                                                                                            
+                                                                                                  
+ average_pooling2d_10 (Aver  (None, 144, 204, 256)        0         ['dropout_41[0][0]']          
+ agePooling2D)                                                                                    
+                                                                                                  
+ concatenate_18 (Concatenat  (None, 144, 204, 512)        0         ['max_pooling2d_10[0][0]',    
+ e)                                                                  'average_pooling2d_10[0][0]']
+                                                                                                  
+ conv2d_46 (Conv2D)          (None, 144, 204, 512)        2359808   ['concatenate_18[0][0]']      
+                                                                                                  
+ batch_normalization_42 (Ba  (None, 144, 204, 512)        2048      ['conv2d_46[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_42 (Activation)  (None, 144, 204, 512)        0         ['batch_normalization_42[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_42 (Dropout)        (None, 144, 204, 512)        0         ['activation_42[0][0]']       
+                                                                                                  
+ conv2d_47 (Conv2D)          (None, 144, 204, 512)        2359808   ['dropout_42[0][0]']          
+                                                                                                  
+ batch_normalization_43 (Ba  (None, 144, 204, 512)        2048      ['conv2d_47[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_43 (Activation)  (None, 144, 204, 512)        0         ['batch_normalization_43[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_43 (Dropout)        (None, 144, 204, 512)        0         ['activation_43[0][0]']       
+                                                                                                  
+ max_pooling2d_11 (MaxPooli  (None, 72, 102, 512)         0         ['dropout_43[0][0]']          
+ ng2D)                                                                                            
+                                                                                                  
+ average_pooling2d_11 (Aver  (None, 72, 102, 512)         0         ['dropout_43[0][0]']          
+ agePooling2D)                                                                                    
+                                                                                                  
+ concatenate_19 (Concatenat  (None, 72, 102, 1024)        0         ['max_pooling2d_11[0][0]',    
+ e)                                                                  'average_pooling2d_11[0][0]']
+                                                                                                  
+ conv2d_48 (Conv2D)          (None, 72, 102, 1024)        9438208   ['concatenate_19[0][0]']      
+                                                                                                  
+ batch_normalization_44 (Ba  (None, 72, 102, 1024)        4096      ['conv2d_48[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_44 (Activation)  (None, 72, 102, 1024)        0         ['batch_normalization_44[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_44 (Dropout)        (None, 72, 102, 1024)        0         ['activation_44[0][0]']       
+                                                                                                  
+ conv2d_49 (Conv2D)          (None, 72, 102, 1024)        9438208   ['dropout_44[0][0]']          
+                                                                                                  
+ batch_normalization_45 (Ba  (None, 72, 102, 1024)        4096      ['conv2d_49[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_45 (Activation)  (None, 72, 102, 1024)        0         ['batch_normalization_45[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_45 (Dropout)        (None, 72, 102, 1024)        0         ['activation_45[0][0]']       
+                                                                                                  
+ gating_signal0_conv (Conv2  (None, 72, 102, 512)         524800    ['dropout_45[0][0]']          
+ D)                                                                                               
+                                                                                                  
+ gating_signal0_bn (BatchNo  (None, 72, 102, 512)         2048      ['gating_signal0_conv[0][0]'] 
+ rmalization)                                                                                     
+                                                                                                  
+ gating_signal0_act (Activa  (None, 72, 102, 512)         0         ['gating_signal0_bn[0][0]']   
+ tion)                                                                                            
+                                                                                                  
+ conv2d_50 (Conv2D)          (None, 72, 102, 512)         262656    ['gating_signal0_act[0][0]']  
+                                                                                                  
+ g_upattention_block0 (Conv  (None, 72, 102, 512)         2359808   ['conv2d_50[0][0]']           
+ 2DTranspose)                                                                                     
+                                                                                                  
+ xlattention_block0 (Conv2D  (None, 72, 102, 512)         1049088   ['dropout_43[0][0]']          
+ )                                                                                                
+                                                                                                  
+ add (Add)                   (None, 72, 102, 512)         0         ['g_upattention_block0[0][0]',
+                                                                     'xlattention_block0[0][0]']  
+                                                                                                  
+ activation_46 (Activation)  (None, 72, 102, 512)         0         ['add[0][0]']                 
+                                                                                                  
+ psiattention_block0 (Conv2  (None, 72, 102, 1)           513       ['activation_46[0][0]']       
+ D)                                                                                               
+                                                                                                  
+ activation_47 (Activation)  (None, 72, 102, 1)           0         ['psiattention_block0[0][0]'] 
+                                                                                                  
+ up_sampling2d (UpSampling2  (None, 144, 204, 1)          0         ['activation_47[0][0]']       
+ D)                                                                                               
+                                                                                                  
+ psi_upattention_block0 (La  (None, 144, 204, 512)        0         ['up_sampling2d[0][0]']       
+ mbda)                                                                                            
+                                                                                                  
+ q_attnattention_block0 (Mu  (None, 144, 204, 512)        0         ['psi_upattention_block0[0][0]
+ ltiply)                                                            ',                            
+                                                                     'dropout_43[0][0]']          
+                                                                                                  
+ q_attn_convattention_block  (None, 144, 204, 512)        262656    ['q_attnattention_block0[0][0]
+ 0 (Conv2D)                                                         ']                            
+                                                                                                  
+ upsampling_0 (UpSampling2D  (None, 144, 204, 1024)       0         ['dropout_45[0][0]']          
+ )                                                                                                
+                                                                                                  
+ q_attn_bnattention_block0   (None, 144, 204, 512)        2048      ['q_attn_convattention_block0[
+ (BatchNormalization)                                               0][0]']                       
+                                                                                                  
+ concatenate_20 (Concatenat  (None, 144, 204, 1536)       0         ['upsampling_0[0][0]',        
+ e)                                                                  'q_attn_bnattention_block0[0]
+                                                                    [0]']                         
+                                                                                                  
+ conv2d_51 (Conv2D)          (None, 144, 204, 512)        7078400   ['concatenate_20[0][0]']      
+                                                                                                  
+ batch_normalization_46 (Ba  (None, 144, 204, 512)        2048      ['conv2d_51[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_48 (Activation)  (None, 144, 204, 512)        0         ['batch_normalization_46[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_46 (Dropout)        (None, 144, 204, 512)        0         ['activation_48[0][0]']       
+                                                                                                  
+ conv2d_52 (Conv2D)          (None, 144, 204, 512)        2359808   ['dropout_46[0][0]']          
+                                                                                                  
+ batch_normalization_47 (Ba  (None, 144, 204, 512)        2048      ['conv2d_52[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_49 (Activation)  (None, 144, 204, 512)        0         ['batch_normalization_47[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_47 (Dropout)        (None, 144, 204, 512)        0         ['activation_49[0][0]']       
+                                                                                                  
+ gating_signal1_conv (Conv2  (None, 144, 204, 256)        131328    ['dropout_47[0][0]']          
+ D)                                                                                               
+                                                                                                  
+ gating_signal1_bn (BatchNo  (None, 144, 204, 256)        1024      ['gating_signal1_conv[0][0]'] 
+ rmalization)                                                                                     
+                                                                                                  
+ gating_signal1_act (Activa  (None, 144, 204, 256)        0         ['gating_signal1_bn[0][0]']   
+ tion)                                                                                            
+                                                                                                  
+ conv2d_53 (Conv2D)          (None, 144, 204, 256)        65792     ['gating_signal1_act[0][0]']  
+                                                                                                  
+ g_upattention_block1 (Conv  (None, 144, 204, 256)        590080    ['conv2d_53[0][0]']           
+ 2DTranspose)                                                                                     
+                                                                                                  
+ xlattention_block1 (Conv2D  (None, 144, 204, 256)        262400    ['dropout_41[0][0]']          
+ )                                                                                                
+                                                                                                  
+ add_1 (Add)                 (None, 144, 204, 256)        0         ['g_upattention_block1[0][0]',
+                                                                     'xlattention_block1[0][0]']  
+                                                                                                  
+ activation_50 (Activation)  (None, 144, 204, 256)        0         ['add_1[0][0]']               
+                                                                                                  
+ psiattention_block1 (Conv2  (None, 144, 204, 1)          257       ['activation_50[0][0]']       
+ D)                                                                                               
+                                                                                                  
+ activation_51 (Activation)  (None, 144, 204, 1)          0         ['psiattention_block1[0][0]'] 
+                                                                                                  
+ up_sampling2d_1 (UpSamplin  (None, 288, 408, 1)          0         ['activation_51[0][0]']       
+ g2D)                                                                                             
+                                                                                                  
+ psi_upattention_block1 (La  (None, 288, 408, 256)        0         ['up_sampling2d_1[0][0]']     
+ mbda)                                                                                            
+                                                                                                  
+ q_attnattention_block1 (Mu  (None, 288, 408, 256)        0         ['psi_upattention_block1[0][0]
+ ltiply)                                                            ',                            
+                                                                     'dropout_41[0][0]']          
+                                                                                                  
+ q_attn_convattention_block  (None, 288, 408, 256)        65792     ['q_attnattention_block1[0][0]
+ 1 (Conv2D)                                                         ']                            
+                                                                                                  
+ upsampling_1 (UpSampling2D  (None, 288, 408, 512)        0         ['dropout_47[0][0]']          
+ )                                                                                                
+                                                                                                  
+ q_attn_bnattention_block1   (None, 288, 408, 256)        1024      ['q_attn_convattention_block1[
+ (BatchNormalization)                                               0][0]']                       
+                                                                                                  
+ concatenate_21 (Concatenat  (None, 288, 408, 768)        0         ['upsampling_1[0][0]',        
+ e)                                                                  'q_attn_bnattention_block1[0]
+                                                                    [0]']                         
+                                                                                                  
+ conv2d_54 (Conv2D)          (None, 288, 408, 256)        1769728   ['concatenate_21[0][0]']      
+                                                                                                  
+ batch_normalization_48 (Ba  (None, 288, 408, 256)        1024      ['conv2d_54[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_52 (Activation)  (None, 288, 408, 256)        0         ['batch_normalization_48[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_48 (Dropout)        (None, 288, 408, 256)        0         ['activation_52[0][0]']       
+                                                                                                  
+ conv2d_55 (Conv2D)          (None, 288, 408, 256)        590080    ['dropout_48[0][0]']          
+                                                                                                  
+ batch_normalization_49 (Ba  (None, 288, 408, 256)        1024      ['conv2d_55[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_53 (Activation)  (None, 288, 408, 256)        0         ['batch_normalization_49[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_49 (Dropout)        (None, 288, 408, 256)        0         ['activation_53[0][0]']       
+                                                                                                  
+ gating_signal2_conv (Conv2  (None, 288, 408, 128)        32896     ['dropout_49[0][0]']          
+ D)                                                                                               
+                                                                                                  
+ gating_signal2_bn (BatchNo  (None, 288, 408, 128)        512       ['gating_signal2_conv[0][0]'] 
+ rmalization)                                                                                     
+                                                                                                  
+ gating_signal2_act (Activa  (None, 288, 408, 128)        0         ['gating_signal2_bn[0][0]']   
+ tion)                                                                                            
+                                                                                                  
+ conv2d_56 (Conv2D)          (None, 288, 408, 128)        16512     ['gating_signal2_act[0][0]']  
+                                                                                                  
+ g_upattention_block2 (Conv  (None, 288, 408, 128)        147584    ['conv2d_56[0][0]']           
+ 2DTranspose)                                                                                     
+                                                                                                  
+ xlattention_block2 (Conv2D  (None, 288, 408, 128)        65664     ['dropout_39[0][0]']          
+ )                                                                                                
+                                                                                                  
+ add_2 (Add)                 (None, 288, 408, 128)        0         ['g_upattention_block2[0][0]',
+                                                                     'xlattention_block2[0][0]']  
+                                                                                                  
+ activation_54 (Activation)  (None, 288, 408, 128)        0         ['add_2[0][0]']               
+                                                                                                  
+ psiattention_block2 (Conv2  (None, 288, 408, 1)          129       ['activation_54[0][0]']       
+ D)                                                                                               
+                                                                                                  
+ activation_55 (Activation)  (None, 288, 408, 1)          0         ['psiattention_block2[0][0]'] 
+                                                                                                  
+ up_sampling2d_2 (UpSamplin  (None, 576, 816, 1)          0         ['activation_55[0][0]']       
+ g2D)                                                                                             
+                                                                                                  
+ psi_upattention_block2 (La  (None, 576, 816, 128)        0         ['up_sampling2d_2[0][0]']     
+ mbda)                                                                                            
+                                                                                                  
+ q_attnattention_block2 (Mu  (None, 576, 816, 128)        0         ['psi_upattention_block2[0][0]
+ ltiply)                                                            ',                            
+                                                                     'dropout_39[0][0]']          
+                                                                                                  
+ q_attn_convattention_block  (None, 576, 816, 128)        16512     ['q_attnattention_block2[0][0]
+ 2 (Conv2D)                                                         ']                            
+                                                                                                  
+ upsampling_2 (UpSampling2D  (None, 576, 816, 256)        0         ['dropout_49[0][0]']          
+ )                                                                                                
+                                                                                                  
+ q_attn_bnattention_block2   (None, 576, 816, 128)        512       ['q_attn_convattention_block2[
+ (BatchNormalization)                                               0][0]']                       
+                                                                                                  
+ concatenate_22 (Concatenat  (None, 576, 816, 384)        0         ['upsampling_2[0][0]',        
+ e)                                                                  'q_attn_bnattention_block2[0]
+                                                                    [0]']                         
+                                                                                                  
+ conv2d_57 (Conv2D)          (None, 576, 816, 128)        442496    ['concatenate_22[0][0]']      
+                                                                                                  
+ batch_normalization_50 (Ba  (None, 576, 816, 128)        512       ['conv2d_57[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_56 (Activation)  (None, 576, 816, 128)        0         ['batch_normalization_50[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_50 (Dropout)        (None, 576, 816, 128)        0         ['activation_56[0][0]']       
+                                                                                                  
+ conv2d_58 (Conv2D)          (None, 576, 816, 128)        147584    ['dropout_50[0][0]']          
+                                                                                                  
+ batch_normalization_51 (Ba  (None, 576, 816, 128)        512       ['conv2d_58[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_57 (Activation)  (None, 576, 816, 128)        0         ['batch_normalization_51[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_51 (Dropout)        (None, 576, 816, 128)        0         ['activation_57[0][0]']       
+                                                                                                  
+ gating_signal3_conv (Conv2  (None, 576, 816, 64)         8256      ['dropout_51[0][0]']          
+ D)                                                                                               
+                                                                                                  
+ gating_signal3_bn (BatchNo  (None, 576, 816, 64)         256       ['gating_signal3_conv[0][0]'] 
+ rmalization)                                                                                     
+                                                                                                  
+ gating_signal3_act (Activa  (None, 576, 816, 64)         0         ['gating_signal3_bn[0][0]']   
+ tion)                                                                                            
+                                                                                                  
+ conv2d_59 (Conv2D)          (None, 576, 816, 64)         4160      ['gating_signal3_act[0][0]']  
+                                                                                                  
+ g_upattention_block3 (Conv  (None, 576, 816, 64)         36928     ['conv2d_59[0][0]']           
+ 2DTranspose)                                                                                     
+                                                                                                  
+ xlattention_block3 (Conv2D  (None, 576, 816, 64)         16448     ['dropout_37[0][0]']          
+ )                                                                                                
+                                                                                                  
+ add_3 (Add)                 (None, 576, 816, 64)         0         ['g_upattention_block3[0][0]',
+                                                                     'xlattention_block3[0][0]']  
+                                                                                                  
+ activation_58 (Activation)  (None, 576, 816, 64)         0         ['add_3[0][0]']               
+                                                                                                  
+ psiattention_block3 (Conv2  (None, 576, 816, 1)          65        ['activation_58[0][0]']       
+ D)                                                                                               
+                                                                                                  
+ activation_59 (Activation)  (None, 576, 816, 1)          0         ['psiattention_block3[0][0]'] 
+                                                                                                  
+ up_sampling2d_3 (UpSamplin  (None, 1152, 1632, 1)        0         ['activation_59[0][0]']       
+ g2D)                                                                                             
+                                                                                                  
+ psi_upattention_block3 (La  (None, 1152, 1632, 64)       0         ['up_sampling2d_3[0][0]']     
+ mbda)                                                                                            
+                                                                                                  
+ q_attnattention_block3 (Mu  (None, 1152, 1632, 64)       0         ['psi_upattention_block3[0][0]
+ ltiply)                                                            ',                            
+                                                                     'dropout_37[0][0]']          
+                                                                                                  
+ q_attn_convattention_block  (None, 1152, 1632, 64)       4160      ['q_attnattention_block3[0][0]
+ 3 (Conv2D)                                                         ']                            
+                                                                                                  
+ upsampling_3 (UpSampling2D  (None, 1152, 1632, 128)      0         ['dropout_51[0][0]']          
+ )                                                                                                
+                                                                                                  
+ q_attn_bnattention_block3   (None, 1152, 1632, 64)       256       ['q_attn_convattention_block3[
+ (BatchNormalization)                                               0][0]']                       
+                                                                                                  
+ concatenate_23 (Concatenat  (None, 1152, 1632, 192)      0         ['upsampling_3[0][0]',        
+ e)                                                                  'q_attn_bnattention_block3[0]
+                                                                    [0]']                         
+                                                                                                  
+ conv2d_60 (Conv2D)          (None, 1152, 1632, 64)       110656    ['concatenate_23[0][0]']      
+                                                                                                  
+ batch_normalization_52 (Ba  (None, 1152, 1632, 64)       256       ['conv2d_60[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_60 (Activation)  (None, 1152, 1632, 64)       0         ['batch_normalization_52[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_52 (Dropout)        (None, 1152, 1632, 64)       0         ['activation_60[0][0]']       
+                                                                                                  
+ conv2d_61 (Conv2D)          (None, 1152, 1632, 64)       36928     ['dropout_52[0][0]']          
+                                                                                                  
+ batch_normalization_53 (Ba  (None, 1152, 1632, 64)       256       ['conv2d_61[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_61 (Activation)  (None, 1152, 1632, 64)       0         ['batch_normalization_53[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_53 (Dropout)        (None, 1152, 1632, 64)       0         ['activation_61[0][0]']       
+                                                                                                  
+ conv2d_62 (Conv2D)          (None, 1152, 1632, 1)        65        ['dropout_53[0][0]']          
+                                                                                                  
+==================================================================================================
+Total params: 43600389 (166.32 MB)
+Trainable params: 43584773 (166.26 MB)
+Non-trainable params: 15616 (61.00 KB)
+__________________________________________________________________________________________________
+None</code></pre>
+</div>
+</div>
+</section>
+<section id="create-a-u-net-model-with-attention-gates-and-residual-connections" class="level2">
+<h2 class="anchored" data-anchor-id="create-a-u-net-model-with-attention-gates-and-residual-connections">Create a U-Net model with attention gates and residual connections</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>res_attn_unet_model <span class="op">=</span> residual_attn_unet(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    input_size<span class="op">=</span>(h, w, c),</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    filter_list<span class="op">=</span>filter_list,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    n_classes<span class="op">=</span>n_classes</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(res_attn_unet_model.summary())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Model: "model_3"
+__________________________________________________________________________________________________
+ Layer (type)                Output Shape                 Param #   Connected to                  
+==================================================================================================
+ input_6 (InputLayer)        [(None, 1152, 1632, 1)]      0         []                            
+                                                                                                  
+ conv2d_63 (Conv2D)          (None, 1152, 1632, 64)       640       ['input_6[0][0]']             
+                                                                                                  
+ batch_normalization_54 (Ba  (None, 1152, 1632, 64)       256       ['conv2d_63[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_62 (Activation)  (None, 1152, 1632, 64)       0         ['batch_normalization_54[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_54 (Dropout)        (None, 1152, 1632, 64)       0         ['activation_62[0][0]']       
+                                                                                                  
+ conv2d_64 (Conv2D)          (None, 1152, 1632, 64)       36928     ['dropout_54[0][0]']          
+                                                                                                  
+ conv2d_65 (Conv2D)          (None, 1152, 1632, 64)       128       ['input_6[0][0]']             
+                                                                                                  
+ batch_normalization_55 (Ba  (None, 1152, 1632, 64)       256       ['conv2d_64[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ batch_normalization_56 (Ba  (None, 1152, 1632, 64)       256       ['conv2d_65[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ dropout_55 (Dropout)        (None, 1152, 1632, 64)       0         ['batch_normalization_55[0][0]
+                                                                    ']                            
+                                                                                                  
+ add_4 (Add)                 (None, 1152, 1632, 64)       0         ['batch_normalization_56[0][0]
+                                                                    ',                            
+                                                                     'dropout_55[0][0]']          
+                                                                                                  
+ activation_63 (Activation)  (None, 1152, 1632, 64)       0         ['add_4[0][0]']               
+                                                                                                  
+ max_pooling2d_12 (MaxPooli  (None, 576, 816, 64)         0         ['activation_63[0][0]']       
+ ng2D)                                                                                            
+                                                                                                  
+ average_pooling2d_12 (Aver  (None, 576, 816, 64)         0         ['activation_63[0][0]']       
+ agePooling2D)                                                                                    
+                                                                                                  
+ concatenate_24 (Concatenat  (None, 576, 816, 128)        0         ['max_pooling2d_12[0][0]',    
+ e)                                                                  'average_pooling2d_12[0][0]']
+                                                                                                  
+ conv2d_66 (Conv2D)          (None, 576, 816, 128)        147584    ['concatenate_24[0][0]']      
+                                                                                                  
+ batch_normalization_57 (Ba  (None, 576, 816, 128)        512       ['conv2d_66[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_64 (Activation)  (None, 576, 816, 128)        0         ['batch_normalization_57[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_56 (Dropout)        (None, 576, 816, 128)        0         ['activation_64[0][0]']       
+                                                                                                  
+ conv2d_67 (Conv2D)          (None, 576, 816, 128)        147584    ['dropout_56[0][0]']          
+                                                                                                  
+ conv2d_68 (Conv2D)          (None, 576, 816, 128)        16512     ['concatenate_24[0][0]']      
+                                                                                                  
+ batch_normalization_58 (Ba  (None, 576, 816, 128)        512       ['conv2d_67[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ batch_normalization_59 (Ba  (None, 576, 816, 128)        512       ['conv2d_68[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ dropout_57 (Dropout)        (None, 576, 816, 128)        0         ['batch_normalization_58[0][0]
+                                                                    ']                            
+                                                                                                  
+ add_5 (Add)                 (None, 576, 816, 128)        0         ['batch_normalization_59[0][0]
+                                                                    ',                            
+                                                                     'dropout_57[0][0]']          
+                                                                                                  
+ activation_65 (Activation)  (None, 576, 816, 128)        0         ['add_5[0][0]']               
+                                                                                                  
+ max_pooling2d_13 (MaxPooli  (None, 288, 408, 128)        0         ['activation_65[0][0]']       
+ ng2D)                                                                                            
+                                                                                                  
+ average_pooling2d_13 (Aver  (None, 288, 408, 128)        0         ['activation_65[0][0]']       
+ agePooling2D)                                                                                    
+                                                                                                  
+ concatenate_25 (Concatenat  (None, 288, 408, 256)        0         ['max_pooling2d_13[0][0]',    
+ e)                                                                  'average_pooling2d_13[0][0]']
+                                                                                                  
+ conv2d_69 (Conv2D)          (None, 288, 408, 256)        590080    ['concatenate_25[0][0]']      
+                                                                                                  
+ batch_normalization_60 (Ba  (None, 288, 408, 256)        1024      ['conv2d_69[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_66 (Activation)  (None, 288, 408, 256)        0         ['batch_normalization_60[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_58 (Dropout)        (None, 288, 408, 256)        0         ['activation_66[0][0]']       
+                                                                                                  
+ conv2d_70 (Conv2D)          (None, 288, 408, 256)        590080    ['dropout_58[0][0]']          
+                                                                                                  
+ conv2d_71 (Conv2D)          (None, 288, 408, 256)        65792     ['concatenate_25[0][0]']      
+                                                                                                  
+ batch_normalization_61 (Ba  (None, 288, 408, 256)        1024      ['conv2d_70[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ batch_normalization_62 (Ba  (None, 288, 408, 256)        1024      ['conv2d_71[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ dropout_59 (Dropout)        (None, 288, 408, 256)        0         ['batch_normalization_61[0][0]
+                                                                    ']                            
+                                                                                                  
+ add_6 (Add)                 (None, 288, 408, 256)        0         ['batch_normalization_62[0][0]
+                                                                    ',                            
+                                                                     'dropout_59[0][0]']          
+                                                                                                  
+ activation_67 (Activation)  (None, 288, 408, 256)        0         ['add_6[0][0]']               
+                                                                                                  
+ max_pooling2d_14 (MaxPooli  (None, 144, 204, 256)        0         ['activation_67[0][0]']       
+ ng2D)                                                                                            
+                                                                                                  
+ average_pooling2d_14 (Aver  (None, 144, 204, 256)        0         ['activation_67[0][0]']       
+ agePooling2D)                                                                                    
+                                                                                                  
+ concatenate_26 (Concatenat  (None, 144, 204, 512)        0         ['max_pooling2d_14[0][0]',    
+ e)                                                                  'average_pooling2d_14[0][0]']
+                                                                                                  
+ conv2d_72 (Conv2D)          (None, 144, 204, 512)        2359808   ['concatenate_26[0][0]']      
+                                                                                                  
+ batch_normalization_63 (Ba  (None, 144, 204, 512)        2048      ['conv2d_72[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_68 (Activation)  (None, 144, 204, 512)        0         ['batch_normalization_63[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_60 (Dropout)        (None, 144, 204, 512)        0         ['activation_68[0][0]']       
+                                                                                                  
+ conv2d_73 (Conv2D)          (None, 144, 204, 512)        2359808   ['dropout_60[0][0]']          
+                                                                                                  
+ conv2d_74 (Conv2D)          (None, 144, 204, 512)        262656    ['concatenate_26[0][0]']      
+                                                                                                  
+ batch_normalization_64 (Ba  (None, 144, 204, 512)        2048      ['conv2d_73[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ batch_normalization_65 (Ba  (None, 144, 204, 512)        2048      ['conv2d_74[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ dropout_61 (Dropout)        (None, 144, 204, 512)        0         ['batch_normalization_64[0][0]
+                                                                    ']                            
+                                                                                                  
+ add_7 (Add)                 (None, 144, 204, 512)        0         ['batch_normalization_65[0][0]
+                                                                    ',                            
+                                                                     'dropout_61[0][0]']          
+                                                                                                  
+ activation_69 (Activation)  (None, 144, 204, 512)        0         ['add_7[0][0]']               
+                                                                                                  
+ max_pooling2d_15 (MaxPooli  (None, 72, 102, 512)         0         ['activation_69[0][0]']       
+ ng2D)                                                                                            
+                                                                                                  
+ average_pooling2d_15 (Aver  (None, 72, 102, 512)         0         ['activation_69[0][0]']       
+ agePooling2D)                                                                                    
+                                                                                                  
+ concatenate_27 (Concatenat  (None, 72, 102, 1024)        0         ['max_pooling2d_15[0][0]',    
+ e)                                                                  'average_pooling2d_15[0][0]']
+                                                                                                  
+ conv2d_75 (Conv2D)          (None, 72, 102, 1024)        9438208   ['concatenate_27[0][0]']      
+                                                                                                  
+ batch_normalization_66 (Ba  (None, 72, 102, 1024)        4096      ['conv2d_75[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_70 (Activation)  (None, 72, 102, 1024)        0         ['batch_normalization_66[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_62 (Dropout)        (None, 72, 102, 1024)        0         ['activation_70[0][0]']       
+                                                                                                  
+ conv2d_76 (Conv2D)          (None, 72, 102, 1024)        9438208   ['dropout_62[0][0]']          
+                                                                                                  
+ conv2d_77 (Conv2D)          (None, 72, 102, 1024)        1049600   ['concatenate_27[0][0]']      
+                                                                                                  
+ batch_normalization_67 (Ba  (None, 72, 102, 1024)        4096      ['conv2d_76[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ batch_normalization_68 (Ba  (None, 72, 102, 1024)        4096      ['conv2d_77[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ dropout_63 (Dropout)        (None, 72, 102, 1024)        0         ['batch_normalization_67[0][0]
+                                                                    ']                            
+                                                                                                  
+ add_8 (Add)                 (None, 72, 102, 1024)        0         ['batch_normalization_68[0][0]
+                                                                    ',                            
+                                                                     'dropout_63[0][0]']          
+                                                                                                  
+ activation_71 (Activation)  (None, 72, 102, 1024)        0         ['add_8[0][0]']               
+                                                                                                  
+ gating_signal0_conv (Conv2  (None, 72, 102, 512)         524800    ['activation_71[0][0]']       
+ D)                                                                                               
+                                                                                                  
+ gating_signal0_bn (BatchNo  (None, 72, 102, 512)         2048      ['gating_signal0_conv[0][0]'] 
+ rmalization)                                                                                     
+                                                                                                  
+ gating_signal0_act (Activa  (None, 72, 102, 512)         0         ['gating_signal0_bn[0][0]']   
+ tion)                                                                                            
+                                                                                                  
+ conv2d_78 (Conv2D)          (None, 72, 102, 512)         262656    ['gating_signal0_act[0][0]']  
+                                                                                                  
+ g_upattention_block0 (Conv  (None, 72, 102, 512)         2359808   ['conv2d_78[0][0]']           
+ 2DTranspose)                                                                                     
+                                                                                                  
+ xlattention_block0 (Conv2D  (None, 72, 102, 512)         1049088   ['activation_69[0][0]']       
+ )                                                                                                
+                                                                                                  
+ add_9 (Add)                 (None, 72, 102, 512)         0         ['g_upattention_block0[0][0]',
+                                                                     'xlattention_block0[0][0]']  
+                                                                                                  
+ activation_72 (Activation)  (None, 72, 102, 512)         0         ['add_9[0][0]']               
+                                                                                                  
+ psiattention_block0 (Conv2  (None, 72, 102, 1)           513       ['activation_72[0][0]']       
+ D)                                                                                               
+                                                                                                  
+ activation_73 (Activation)  (None, 72, 102, 1)           0         ['psiattention_block0[0][0]'] 
+                                                                                                  
+ up_sampling2d_4 (UpSamplin  (None, 144, 204, 1)          0         ['activation_73[0][0]']       
+ g2D)                                                                                             
+                                                                                                  
+ psi_upattention_block0 (La  (None, 144, 204, 512)        0         ['up_sampling2d_4[0][0]']     
+ mbda)                                                                                            
+                                                                                                  
+ q_attnattention_block0 (Mu  (None, 144, 204, 512)        0         ['psi_upattention_block0[0][0]
+ ltiply)                                                            ',                            
+                                                                     'activation_69[0][0]']       
+                                                                                                  
+ q_attn_convattention_block  (None, 144, 204, 512)        262656    ['q_attnattention_block0[0][0]
+ 0 (Conv2D)                                                         ']                            
+                                                                                                  
+ upsampling_0 (UpSampling2D  (None, 144, 204, 1024)       0         ['activation_71[0][0]']       
+ )                                                                                                
+                                                                                                  
+ q_attn_bnattention_block0   (None, 144, 204, 512)        2048      ['q_attn_convattention_block0[
+ (BatchNormalization)                                               0][0]']                       
+                                                                                                  
+ concatenate_28 (Concatenat  (None, 144, 204, 1536)       0         ['upsampling_0[0][0]',        
+ e)                                                                  'q_attn_bnattention_block0[0]
+                                                                    [0]']                         
+                                                                                                  
+ conv2d_79 (Conv2D)          (None, 144, 204, 512)        7078400   ['concatenate_28[0][0]']      
+                                                                                                  
+ batch_normalization_69 (Ba  (None, 144, 204, 512)        2048      ['conv2d_79[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_74 (Activation)  (None, 144, 204, 512)        0         ['batch_normalization_69[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_64 (Dropout)        (None, 144, 204, 512)        0         ['activation_74[0][0]']       
+                                                                                                  
+ conv2d_80 (Conv2D)          (None, 144, 204, 512)        2359808   ['dropout_64[0][0]']          
+                                                                                                  
+ conv2d_81 (Conv2D)          (None, 144, 204, 512)        786944    ['concatenate_28[0][0]']      
+                                                                                                  
+ batch_normalization_70 (Ba  (None, 144, 204, 512)        2048      ['conv2d_80[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ batch_normalization_71 (Ba  (None, 144, 204, 512)        2048      ['conv2d_81[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ dropout_65 (Dropout)        (None, 144, 204, 512)        0         ['batch_normalization_70[0][0]
+                                                                    ']                            
+                                                                                                  
+ add_10 (Add)                (None, 144, 204, 512)        0         ['batch_normalization_71[0][0]
+                                                                    ',                            
+                                                                     'dropout_65[0][0]']          
+                                                                                                  
+ activation_75 (Activation)  (None, 144, 204, 512)        0         ['add_10[0][0]']              
+                                                                                                  
+ gating_signal1_conv (Conv2  (None, 144, 204, 256)        131328    ['activation_75[0][0]']       
+ D)                                                                                               
+                                                                                                  
+ gating_signal1_bn (BatchNo  (None, 144, 204, 256)        1024      ['gating_signal1_conv[0][0]'] 
+ rmalization)                                                                                     
+                                                                                                  
+ gating_signal1_act (Activa  (None, 144, 204, 256)        0         ['gating_signal1_bn[0][0]']   
+ tion)                                                                                            
+                                                                                                  
+ conv2d_82 (Conv2D)          (None, 144, 204, 256)        65792     ['gating_signal1_act[0][0]']  
+                                                                                                  
+ g_upattention_block1 (Conv  (None, 144, 204, 256)        590080    ['conv2d_82[0][0]']           
+ 2DTranspose)                                                                                     
+                                                                                                  
+ xlattention_block1 (Conv2D  (None, 144, 204, 256)        262400    ['activation_67[0][0]']       
+ )                                                                                                
+                                                                                                  
+ add_11 (Add)                (None, 144, 204, 256)        0         ['g_upattention_block1[0][0]',
+                                                                     'xlattention_block1[0][0]']  
+                                                                                                  
+ activation_76 (Activation)  (None, 144, 204, 256)        0         ['add_11[0][0]']              
+                                                                                                  
+ psiattention_block1 (Conv2  (None, 144, 204, 1)          257       ['activation_76[0][0]']       
+ D)                                                                                               
+                                                                                                  
+ activation_77 (Activation)  (None, 144, 204, 1)          0         ['psiattention_block1[0][0]'] 
+                                                                                                  
+ up_sampling2d_5 (UpSamplin  (None, 288, 408, 1)          0         ['activation_77[0][0]']       
+ g2D)                                                                                             
+                                                                                                  
+ psi_upattention_block1 (La  (None, 288, 408, 256)        0         ['up_sampling2d_5[0][0]']     
+ mbda)                                                                                            
+                                                                                                  
+ q_attnattention_block1 (Mu  (None, 288, 408, 256)        0         ['psi_upattention_block1[0][0]
+ ltiply)                                                            ',                            
+                                                                     'activation_67[0][0]']       
+                                                                                                  
+ q_attn_convattention_block  (None, 288, 408, 256)        65792     ['q_attnattention_block1[0][0]
+ 1 (Conv2D)                                                         ']                            
+                                                                                                  
+ upsampling_1 (UpSampling2D  (None, 288, 408, 512)        0         ['activation_75[0][0]']       
+ )                                                                                                
+                                                                                                  
+ q_attn_bnattention_block1   (None, 288, 408, 256)        1024      ['q_attn_convattention_block1[
+ (BatchNormalization)                                               0][0]']                       
+                                                                                                  
+ concatenate_29 (Concatenat  (None, 288, 408, 768)        0         ['upsampling_1[0][0]',        
+ e)                                                                  'q_attn_bnattention_block1[0]
+                                                                    [0]']                         
+                                                                                                  
+ conv2d_83 (Conv2D)          (None, 288, 408, 256)        1769728   ['concatenate_29[0][0]']      
+                                                                                                  
+ batch_normalization_72 (Ba  (None, 288, 408, 256)        1024      ['conv2d_83[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_78 (Activation)  (None, 288, 408, 256)        0         ['batch_normalization_72[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_66 (Dropout)        (None, 288, 408, 256)        0         ['activation_78[0][0]']       
+                                                                                                  
+ conv2d_84 (Conv2D)          (None, 288, 408, 256)        590080    ['dropout_66[0][0]']          
+                                                                                                  
+ conv2d_85 (Conv2D)          (None, 288, 408, 256)        196864    ['concatenate_29[0][0]']      
+                                                                                                  
+ batch_normalization_73 (Ba  (None, 288, 408, 256)        1024      ['conv2d_84[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ batch_normalization_74 (Ba  (None, 288, 408, 256)        1024      ['conv2d_85[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ dropout_67 (Dropout)        (None, 288, 408, 256)        0         ['batch_normalization_73[0][0]
+                                                                    ']                            
+                                                                                                  
+ add_12 (Add)                (None, 288, 408, 256)        0         ['batch_normalization_74[0][0]
+                                                                    ',                            
+                                                                     'dropout_67[0][0]']          
+                                                                                                  
+ activation_79 (Activation)  (None, 288, 408, 256)        0         ['add_12[0][0]']              
+                                                                                                  
+ gating_signal2_conv (Conv2  (None, 288, 408, 128)        32896     ['activation_79[0][0]']       
+ D)                                                                                               
+                                                                                                  
+ gating_signal2_bn (BatchNo  (None, 288, 408, 128)        512       ['gating_signal2_conv[0][0]'] 
+ rmalization)                                                                                     
+                                                                                                  
+ gating_signal2_act (Activa  (None, 288, 408, 128)        0         ['gating_signal2_bn[0][0]']   
+ tion)                                                                                            
+                                                                                                  
+ conv2d_86 (Conv2D)          (None, 288, 408, 128)        16512     ['gating_signal2_act[0][0]']  
+                                                                                                  
+ g_upattention_block2 (Conv  (None, 288, 408, 128)        147584    ['conv2d_86[0][0]']           
+ 2DTranspose)                                                                                     
+                                                                                                  
+ xlattention_block2 (Conv2D  (None, 288, 408, 128)        65664     ['activation_65[0][0]']       
+ )                                                                                                
+                                                                                                  
+ add_13 (Add)                (None, 288, 408, 128)        0         ['g_upattention_block2[0][0]',
+                                                                     'xlattention_block2[0][0]']  
+                                                                                                  
+ activation_80 (Activation)  (None, 288, 408, 128)        0         ['add_13[0][0]']              
+                                                                                                  
+ psiattention_block2 (Conv2  (None, 288, 408, 1)          129       ['activation_80[0][0]']       
+ D)                                                                                               
+                                                                                                  
+ activation_81 (Activation)  (None, 288, 408, 1)          0         ['psiattention_block2[0][0]'] 
+                                                                                                  
+ up_sampling2d_6 (UpSamplin  (None, 576, 816, 1)          0         ['activation_81[0][0]']       
+ g2D)                                                                                             
+                                                                                                  
+ psi_upattention_block2 (La  (None, 576, 816, 128)        0         ['up_sampling2d_6[0][0]']     
+ mbda)                                                                                            
+                                                                                                  
+ q_attnattention_block2 (Mu  (None, 576, 816, 128)        0         ['psi_upattention_block2[0][0]
+ ltiply)                                                            ',                            
+                                                                     'activation_65[0][0]']       
+                                                                                                  
+ q_attn_convattention_block  (None, 576, 816, 128)        16512     ['q_attnattention_block2[0][0]
+ 2 (Conv2D)                                                         ']                            
+                                                                                                  
+ upsampling_2 (UpSampling2D  (None, 576, 816, 256)        0         ['activation_79[0][0]']       
+ )                                                                                                
+                                                                                                  
+ q_attn_bnattention_block2   (None, 576, 816, 128)        512       ['q_attn_convattention_block2[
+ (BatchNormalization)                                               0][0]']                       
+                                                                                                  
+ concatenate_30 (Concatenat  (None, 576, 816, 384)        0         ['upsampling_2[0][0]',        
+ e)                                                                  'q_attn_bnattention_block2[0]
+                                                                    [0]']                         
+                                                                                                  
+ conv2d_87 (Conv2D)          (None, 576, 816, 128)        442496    ['concatenate_30[0][0]']      
+                                                                                                  
+ batch_normalization_75 (Ba  (None, 576, 816, 128)        512       ['conv2d_87[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_82 (Activation)  (None, 576, 816, 128)        0         ['batch_normalization_75[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_68 (Dropout)        (None, 576, 816, 128)        0         ['activation_82[0][0]']       
+                                                                                                  
+ conv2d_88 (Conv2D)          (None, 576, 816, 128)        147584    ['dropout_68[0][0]']          
+                                                                                                  
+ conv2d_89 (Conv2D)          (None, 576, 816, 128)        49280     ['concatenate_30[0][0]']      
+                                                                                                  
+ batch_normalization_76 (Ba  (None, 576, 816, 128)        512       ['conv2d_88[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ batch_normalization_77 (Ba  (None, 576, 816, 128)        512       ['conv2d_89[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ dropout_69 (Dropout)        (None, 576, 816, 128)        0         ['batch_normalization_76[0][0]
+                                                                    ']                            
+                                                                                                  
+ add_14 (Add)                (None, 576, 816, 128)        0         ['batch_normalization_77[0][0]
+                                                                    ',                            
+                                                                     'dropout_69[0][0]']          
+                                                                                                  
+ activation_83 (Activation)  (None, 576, 816, 128)        0         ['add_14[0][0]']              
+                                                                                                  
+ gating_signal3_conv (Conv2  (None, 576, 816, 64)         8256      ['activation_83[0][0]']       
+ D)                                                                                               
+                                                                                                  
+ gating_signal3_bn (BatchNo  (None, 576, 816, 64)         256       ['gating_signal3_conv[0][0]'] 
+ rmalization)                                                                                     
+                                                                                                  
+ gating_signal3_act (Activa  (None, 576, 816, 64)         0         ['gating_signal3_bn[0][0]']   
+ tion)                                                                                            
+                                                                                                  
+ conv2d_90 (Conv2D)          (None, 576, 816, 64)         4160      ['gating_signal3_act[0][0]']  
+                                                                                                  
+ g_upattention_block3 (Conv  (None, 576, 816, 64)         36928     ['conv2d_90[0][0]']           
+ 2DTranspose)                                                                                     
+                                                                                                  
+ xlattention_block3 (Conv2D  (None, 576, 816, 64)         16448     ['activation_63[0][0]']       
+ )                                                                                                
+                                                                                                  
+ add_15 (Add)                (None, 576, 816, 64)         0         ['g_upattention_block3[0][0]',
+                                                                     'xlattention_block3[0][0]']  
+                                                                                                  
+ activation_84 (Activation)  (None, 576, 816, 64)         0         ['add_15[0][0]']              
+                                                                                                  
+ psiattention_block3 (Conv2  (None, 576, 816, 1)          65        ['activation_84[0][0]']       
+ D)                                                                                               
+                                                                                                  
+ activation_85 (Activation)  (None, 576, 816, 1)          0         ['psiattention_block3[0][0]'] 
+                                                                                                  
+ up_sampling2d_7 (UpSamplin  (None, 1152, 1632, 1)        0         ['activation_85[0][0]']       
+ g2D)                                                                                             
+                                                                                                  
+ psi_upattention_block3 (La  (None, 1152, 1632, 64)       0         ['up_sampling2d_7[0][0]']     
+ mbda)                                                                                            
+                                                                                                  
+ q_attnattention_block3 (Mu  (None, 1152, 1632, 64)       0         ['psi_upattention_block3[0][0]
+ ltiply)                                                            ',                            
+                                                                     'activation_63[0][0]']       
+                                                                                                  
+ q_attn_convattention_block  (None, 1152, 1632, 64)       4160      ['q_attnattention_block3[0][0]
+ 3 (Conv2D)                                                         ']                            
+                                                                                                  
+ upsampling_3 (UpSampling2D  (None, 1152, 1632, 128)      0         ['activation_83[0][0]']       
+ )                                                                                                
+                                                                                                  
+ q_attn_bnattention_block3   (None, 1152, 1632, 64)       256       ['q_attn_convattention_block3[
+ (BatchNormalization)                                               0][0]']                       
+                                                                                                  
+ concatenate_31 (Concatenat  (None, 1152, 1632, 192)      0         ['upsampling_3[0][0]',        
+ e)                                                                  'q_attn_bnattention_block3[0]
+                                                                    [0]']                         
+                                                                                                  
+ conv2d_91 (Conv2D)          (None, 1152, 1632, 64)       110656    ['concatenate_31[0][0]']      
+                                                                                                  
+ batch_normalization_78 (Ba  (None, 1152, 1632, 64)       256       ['conv2d_91[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ activation_86 (Activation)  (None, 1152, 1632, 64)       0         ['batch_normalization_78[0][0]
+                                                                    ']                            
+                                                                                                  
+ dropout_70 (Dropout)        (None, 1152, 1632, 64)       0         ['activation_86[0][0]']       
+                                                                                                  
+ conv2d_92 (Conv2D)          (None, 1152, 1632, 64)       36928     ['dropout_70[0][0]']          
+                                                                                                  
+ conv2d_93 (Conv2D)          (None, 1152, 1632, 64)       12352     ['concatenate_31[0][0]']      
+                                                                                                  
+ batch_normalization_79 (Ba  (None, 1152, 1632, 64)       256       ['conv2d_92[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ batch_normalization_80 (Ba  (None, 1152, 1632, 64)       256       ['conv2d_93[0][0]']           
+ tchNormalization)                                                                                
+                                                                                                  
+ dropout_71 (Dropout)        (None, 1152, 1632, 64)       0         ['batch_normalization_79[0][0]
+                                                                    ']                            
+                                                                                                  
+ add_16 (Add)                (None, 1152, 1632, 64)       0         ['batch_normalization_80[0][0]
+                                                                    ',                            
+                                                                     'dropout_71[0][0]']          
+                                                                                                  
+ activation_87 (Activation)  (None, 1152, 1632, 64)       0         ['add_16[0][0]']              
+                                                                                                  
+ conv2d_94 (Conv2D)          (None, 1152, 1632, 1)        65        ['activation_87[0][0]']       
+                                                                                                  
+==================================================================================================
+Total params: 46052293 (175.68 MB)
+Trainable params: 46030789 (175.59 MB)
+Non-trainable params: 21504 (84.00 KB)
+__________________________________________________________________________________________________
+None</code></pre>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
