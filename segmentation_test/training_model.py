@@ -267,7 +267,7 @@ def decoder_block(c1, c2, c3, c4, c5):
         dropout=False,
         drp_rt=0)
 
-    # third conccat layer
+    # third concat layer
     u8 = tf.keras.layers.Conv2DTranspose(
         32, (2, 2), strides=(2, 2), padding='same')(c7)
     u8 = tf.keras.layers.concatenate([u8, c2])

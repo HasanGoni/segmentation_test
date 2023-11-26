@@ -1,0 +1,12 @@
+website:
+  sidebar:
+    contents:
+      - index.ipynb
+      - 00_core.ipynb
+      - 01_confg.ipynb
+      - 02_model_developement.ipynb
+      - 03_viz_utils.ipynb
+      - 04_metrics_and_loss.ipynb
+      - 05_pytorch_ds_creation.ipynb
+      - 06_convert_pdf_to_excel.ipynb
+      - 07_tf_model_creation.ipynb
