@@ -4,6 +4,7 @@
 __all__ = ['get_transforms', 'SegmentationDataset', 'create_pytorch_dataloader', 'visualize_batch']
 
 # %% ../nbs/09_dataset_creation.ipynb 4
+import torch
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
 from torch.utils.data import Dataset, DataLoader, random_split
@@ -27,14 +28,15 @@ def get_transforms(*, data):
             A.Transpose(p=0.5),
             A.ShiftScaleRotate(shift_limit=0.01, scale_limit=0.04, rotate_limit=0, p=0.25),
             #A.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-            A.Normalize(mean=[0, 0, 0], std=[1/255, 1/255, 1/255]),
+            #A.Normalize(mean=[0, 0, 0], std=[1/255, 1/255, 1/255]),
+            A.Normalize(mean=[0], std=[1/255]),
             ToTensorV2(),
         ])
 
     elif data == 'valid':
         return A.Compose([
             #A.Resize(256, 256),
-            A.Normalize(mean=[0, 0, 0], std=[1/255, 1/255, 1/255]),
+            A.Normalize(mean=[0], std=[1/255]),
             #A.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
             ToTensorV2(),
         ])
@@ -60,17 +62,21 @@ class SegmentationDataset(Dataset):
         return len(self.images)
 
     def __getitem__(self, idx):
-        image = cv2.imread(f"{self.images[idx]}")
-        mask = cv2.imread(f"{self.masks[idx]}",cv2.IMREAD_GRAYSCALE)
+        image = np.array(Image.open(f"{self.images[idx]}").convert("L")).astype(dtype=np.float32)
+        mask = np.array(Image.open(f"{self.masks[idx]}").convert("L"))
+        mask = (mask> 0).astype(np.float32)
 
         if self.transform:
             augmented = self.transform(image=image, mask=mask)
             image = augmented['image']
             mask = augmented['mask']
 
+        #image = image[None, ...]
+        mask = mask[None, ...]
+
         return image, mask
 
-# %% ../nbs/09_dataset_creation.ipynb 14
+# %% ../nbs/09_dataset_creation.ipynb 17
 def create_pytorch_dataloader(
     split_type:str, # in case of 'random' randomly data will be splitted
     split_per:float, # percentage of training data
@@ -99,8 +105,13 @@ def create_pytorch_dataloader(
         print(f' training dataset length = {len(train_ds)} and validation dataset length=  {len(val_ds)}')
         
 
-        train_ds.dataset.transform = get_transforms(data='train')
-        val_ds.dataset.transform = get_transforms(data='valid')
+        if transforms is not None:
+            train_ds.dataset.transform = transforms(data='train')
+            val_ds.dataset.transform = transforms(data='valid')
+        else:
+            train_ds.dataset.transform = get_transforms(data='train')
+            val_ds.dataset.transform = get_transforms(data='valid')
+            print(train_ds[0][0].shape, val_ds[0][0].shape)
 
         train_dl = DataLoader(
                               train_ds, 
@@ -125,13 +136,13 @@ def create_pytorch_dataloader(
 
 
 
-# %% ../nbs/09_dataset_creation.ipynb 17
+# %% ../nbs/09_dataset_creation.ipynb 22
 def visualize_batch(images, masks, num_images=4):
     fig, axs = plt.subplots(1,num_images, figsize=(5, num_images*5))
     for idx, (image, mask) in enumerate(zip(images, masks)):
         if idx >= num_images:
             break
-        axs[idx].imshow(image.permute(1, 2, 0)[:,:,0], cmap='gray')
+        axs[idx].imshow(image.squeeze(0).squeeze(0), cmap='gray')
         axs[idx].imshow(mask.squeeze(), cmap='jet', alpha=0.3)  # overlay mask on image
         axs[idx].axis('off')
         axs[idx].set_title('Image with Mask')
