@@ -2,7 +2,8 @@
 
 # %% auto 0
 __all__ = ['IMAGE_HEIGHT', 'IMAGE_WIDTH', 'EPOCS', 'BATCH_SIZE', 'BUFFER_SIZE', 'class_names', 'train_count', 'test_count',
-           'num_classes', 'steps_per_epoch', 'validation_steps', 'Preprocess', 'foo']
+           'num_classes', 'steps_per_epoch', 'validation_steps', 'Preprocess', 'convert_np_and_uint8',
+           'convert_one_channel', 'foo']
 
 # %% ../nbs/00_core.ipynb 3
 import tensorflow as tf
@@ -117,6 +118,44 @@ def augmentation_(
     #mask = tf.expand_dims(mask, axis=-1)
     return image, mask
 
+# %% ../nbs/00_core.ipynb 16
+@patch_to(Preprocess)
+def show_aug(
+    self,
+    image,
+    mask,
+    original_image=None,
+    original_mask=None
+    ):
+    
+    fontsize = 18
+    
+    if original_image is None and original_mask is None:
+        f, ax = plt.subplots(2, 1, figsize=(8, 8))
+
+        ax[0].imshow(image)
+        ax[1].imshow(mask)
+    else:
+        f, ax = plt.subplots(2, 2, figsize=(8, 8))
+
+        ax[0, 0].imshow(original_image)
+        ax[0, 0].set_title('Original image', fontsize=fontsize)
+        ax[0, 0].axis('off')
+        
+        ax[1, 0].imshow(original_mask)
+        ax[1, 0].set_title('Original mask', fontsize=fontsize)
+        ax[1, 0].axis('off')
+        
+        ax[0, 1].imshow(image)
+        ax[0, 1].set_title('Transformed image', fontsize=fontsize)
+        ax[0, 1].axis('off')
+
+        
+        ax[1, 1].imshow(mask)
+        ax[1, 1].set_title('Transformed mask', fontsize=fontsize)
+        ax[1, 1].axis('off')
+    f.tight_layout()
+
 # %% ../nbs/00_core.ipynb 17
 @patch_to(Preprocess)
 def read_aug(
@@ -147,7 +186,7 @@ def normalize(
     else:
         return (_normalize(image) * 2.0) -1.0
 
-# %% ../nbs/00_core.ipynb 22
+# %% ../nbs/00_core.ipynb 23
 @ patch_to(Preprocess)
 def process_image_and_mask(
                        self,
@@ -170,7 +209,7 @@ def process_image_and_mask(
         mask = tf.reshape(mask, (self.im_height, self.im_width, 3,))
     return image,mask
 
-# %% ../nbs/00_core.ipynb 27
+# %% ../nbs/00_core.ipynb 28
 @ patch_to(Preprocess)
 def process_data(
                  self,
@@ -183,7 +222,7 @@ def process_data(
     aug_img, aug_lbl = tf.numpy_function(func=self.process_image_and_mask, inp=[image, label, norm, one_channel, aug_data], Tout=(tf.float32, tf.float32))
     return aug_img, aug_lbl
 
-# %% ../nbs/00_core.ipynb 28
+# %% ../nbs/00_core.ipynb 29
 @patch_to(Preprocess)
 def set_shapes(
               self,
@@ -194,7 +233,7 @@ def set_shapes(
     label.set_shape(img_shape)
     return img, label
 
-# %% ../nbs/00_core.ipynb 29
+# %% ../nbs/00_core.ipynb 30
 @patch_to(Preprocess)
 def create_dataset(
                   self,
@@ -207,7 +246,7 @@ def create_dataset(
     _dataset = _dataset.map(partial(self.process_data, aug_data=aug, norm=norm), num_parallel_calls=tf.data.AUTOTUNE)
     
     if self.one_channel:
-        _dataset = _dataset.map(partial(self.et_shapes, img_shape=(self.im_height, self.im_width, 1)), num_parallel_calls=tf.data.AUTOTUNE)
+        _dataset = _dataset.map(partial(self.set_shapes, img_shape=(self.im_height, self.im_width, 1)), num_parallel_calls=tf.data.AUTOTUNE)
     else:
         _dataset = _dataset.map(partial(self.set_shapes, img_shape=(self.im_height, self.im_width, 3)), num_parallel_calls=tf.data.AUTOTUNE)
     if train:
@@ -224,7 +263,7 @@ def create_dataset(
         return  _dataset.batch(self.bs).repeat()
 
 
-# %% ../nbs/00_core.ipynb 30
+# %% ../nbs/00_core.ipynb 31
 @patch_to(Preprocess)
 def create_train_test_dataset(self):
     self.train_dataset = self.create_dataset(
@@ -241,5 +280,91 @@ def create_train_test_dataset(self):
                                            train=False)
     return self.train_dataset, self.test_dataset
 
-# %% ../nbs/00_core.ipynb 33
+# %% ../nbs/00_core.ipynb 36
+def convert_np_and_uint8(img:tf.Tensor)->Tuple[np.array, np.array]:
+    "Convert img to np.array and uint8"
+
+    if isinstance(img, tf.data.Dataset) or isinstance(img, tf.Tensor):
+        m_scale1=img.numpy()
+        m_scale255=(img * 255).numpy().astype(np.uint8)
+    elif isinstance(img, np.ndarray):
+            
+        if img.dtype in [np.float16, np.float32, np.float64]:
+            m_scale255 = (img * 255).astype(np.uint8)
+            m_scale1 = img
+            raise Exception("unknown dtype:", img.dtype)
+
+    return m_scale1, m_scale255
+
+# %% ../nbs/00_core.ipynb 37
+def convert_one_channel(img:tf.Tensor):
+    "Convert image to one channel"
+    img = tf.image.rgb_to_grayscale(img)
+    img = tf.reshape(img, (IMAGE_HEIGHT, IMAGE_WIDTH, 1))
+    return img
+
+# %% ../nbs/00_core.ipynb 38
+@patch_to(Preprocess)
+def create_color_mask(
+             self,
+             mask:Union[np.array, tf.Tensor], 
+             img:Union[np.array, tf.Tensor],
+             threshold:float=0.5):
+    "Creating color mask for segmentation"
+    overlay_mask = np.ones((self.im_height, self.im_width, 3,), dtype=np.uint8)
+    overlay_mask[:, :, 0] = img.reshape(*(self.im_height, self.im_width))
+    overlay_mask[:, :, 1] = img.reshape(*(self.im_height, self.im_width))
+    overlay_mask[:, :, 2] = img.reshape(*(self.im_height, self.im_width))
+    match = mask.reshape(*(self.im_height, self.im_width)) > (threshold * 255)
+    overlay_mask[match] = [0,255,0]
+    return overlay_mask
+
+# %% ../nbs/00_core.ipynb 39
+@patch_to(Preprocess)
+def display_np_batch(
+                    self,
+                    images:np.ndarray,
+                    masks:np.ndarray,
+                    threshold:float=0.5):
+    "Displaying batch of images and masks"
+    n_batch = images.shape[0]
+    for i in range(n_batch):
+        if images[i].shape[2] ==3:
+            img = images[i][:,:,0]
+            mask = masks[i][:,:,0]
+        else:
+            img = images[i].reshape(self.im_height, self.im_width )
+            mask = masks[i].reshape(self.im_height, self.im_width )
+        
+        _, ax = plt.subplots(1, 3, figsize=(15, 10)) 
+        ax[0].imshow(img, cmap='gray')
+        ax[0].axis('off')
+        ax[0].set_title('only image')
+        clr_mask_ = self.create_color_mask(mask=mask, img=img, threshold=threshold)
+        ax[1].imshow(mask)
+        ax[1].axis('off')
+        ax[1].set_title('only mask')
+        ax[2].imshow(clr_mask_)
+        ax[2].axis('off')
+        ax[2].set_title('image with mask')
+        plt.tight_layout()
+
+# %% ../nbs/00_core.ipynb 40
+@patch_to(Preprocess)
+def display_ds(self,
+            ds:tf.data.Dataset):
+
+    images, masks = next(iter(ds))
+
+    # convert to numpy and uint8 and getting scaled(255) image and mask
+    images_np, images_255_np = convert_np_and_uint8(images)
+    masks_np, masks_255_np = convert_np_and_uint8(masks)
+    self.display_np_batch(
+                          images=images_255_np,
+                          masks=masks_255_np, 
+                          threshold=0.5)
+
+    
+
+# %% ../nbs/00_core.ipynb 42
 def foo(): pass
