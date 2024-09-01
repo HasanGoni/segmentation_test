@@ -14,6 +14,7 @@ import sys
 from dataclasses import dataclass, field
 from typing import Optional
 import transformers
+from fastcore.imports import *
 
 import torch
 from datasets import load_dataset
@@ -160,7 +161,7 @@ class ModelArguments:
 
 
 
-# %% ../../nbs/11_mae_pretraining.ipynb 14
+# %% ../../nbs/11_mae_pretraining.ipynb 20
 @dataclass
 class CustomTrainingArguments(TrainingArguments):
     base_learning_rate: float = field(
@@ -171,7 +172,7 @@ def collate_fn(examples):
     return {"pixel_values": pixel_values}
 
 
-# %% ../../nbs/11_mae_pretraining.ipynb 15
+# %% ../../nbs/11_mae_pretraining.ipynb 21
 def main_():
 
     # getting arguments and parser
@@ -225,15 +226,24 @@ def main_():
                 "the `--output_dir` or add `--overwrite_output_dir` to train from scratch."
             )
 
-	# Initialize our dataset.
 	ds = load_dataset(
-        data_args.dataset_name,
-        data_args.dataset_config_name,
-        data_files=data_args.data_files,
-        cache_dir=model_args.cache_dir,
-        token=model_args.token,
-        trust_remote_code=data_args.trust_remote_code,
-    )
+    	'imagefolder',
+		data_dir=data_args.train_dir,
+		split='train',
+		cache_dir=model_args.cache_dir,
+		token=model_args.token,
+
+	)
+	# Initialize our dataset.
+	#ds = load_dataset(
+        ##data_args.dataset_name,
+        #data_args.dataset_config_name,
+		#train_dir=data_args.train_dir,
+        #data_files=data_args.data_files,
+        #cache_dir=model_args.cache_dir,
+        #token=model_args.token,
+        #trust_remote_code=data_args.trust_remote_code,
+    #)
 
 	#If we don't have a validation split, split off a percentage of train as validation.
 	data_args.train_val_split = None if "validation" in ds.keys() else data_args.train_val_split
@@ -390,3 +400,7 @@ def main_():
 		}
 
 
+
+# %% ../../nbs/11_mae_pretraining.ipynb 59
+if __name__ == "__main__":
+	main_()
