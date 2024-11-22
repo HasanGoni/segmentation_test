@@ -2,7 +2,8 @@
 
 # %% auto 0
 __all__ = ['get_transforms', 'SegmentationDataset', 'repeat_collate_fn', 'split_ds', 'InferenceDataset',
-           'create_pytorch_dataloader', 'get_training_augmentation', 'get_validation_augmentation', 'visualize_batch']
+           'create_pytorch_dataloader', 'get_training_augmentation', 'get_validation_augmentation',
+           'create_mask_statistics', 'visualize_batch', 'msk_crit', 'create_batch_predictions']
 
 # %% ../nbs/09_dataset_creation.ipynb 4
 import albumentations as A
@@ -20,8 +21,17 @@ from fastcore.foundation import *
 
 import matplotlib.pyplot as plt
 import numpy as np
+from typing import Optional
+from scipy import ndimage
 
 # %% ../nbs/09_dataset_creation.ipynb 5
+from cv_tools.core import *
+from cv_tools.imports import *
+from fastcore.all import *
+from fastcore.imports import *
+from fastcore.script import *
+
+# %% ../nbs/09_dataset_creation.ipynb 7
 def get_transforms(*, data):
     if data == 'train':
         return A.Compose([
@@ -44,7 +54,7 @@ def get_transforms(*, data):
             ToTensorV2(),
         ])
 
-# %% ../nbs/09_dataset_creation.ipynb 8
+# %% ../nbs/09_dataset_creation.ipynb 11
 class SegmentationDataset(Dataset):
     def __init__(self, image_path, mask_path, exts, transform=None):
         self.image_path = image_path
@@ -78,7 +88,7 @@ class SegmentationDataset(Dataset):
 
         return image, mask# Add channel dimension to mask
 
-# %% ../nbs/09_dataset_creation.ipynb 15
+# %% ../nbs/09_dataset_creation.ipynb 18
 def repeat_collate_fn(batch, batch_size=4):
     images, masks = zip(*batch)
 
@@ -94,7 +104,7 @@ def repeat_collate_fn(batch, batch_size=4):
     return torch.stack(images), torch.stack(masks)
 
 
-# %% ../nbs/09_dataset_creation.ipynb 16
+# %% ../nbs/09_dataset_creation.ipynb 19
 def split_ds(ds:Dataset, val_split:float=0.2):
     val_len = int(len(ds) * val_split)
     trn_ds = Subset(ds, indices=range(val_len))
@@ -102,7 +112,7 @@ def split_ds(ds:Dataset, val_split:float=0.2):
     return trn_ds, val_ds
 
 
-# %% ../nbs/09_dataset_creation.ipynb 18
+# %% ../nbs/09_dataset_creation.ipynb 21
 class InferenceDataset(Dataset):
     def __init__(self, image_dir,transform=None):
         self.image_dir = image_dir
@@ -131,7 +141,7 @@ class InferenceDataset(Dataset):
 
 
 
-# %% ../nbs/09_dataset_creation.ipynb 19
+# %% ../nbs/09_dataset_creation.ipynb 22
 def create_pytorch_dataloader(
     split_type:str, # in case of 'random' randomly data will be splitted
     split_per:float, # percentage of training data
@@ -217,14 +227,14 @@ def create_pytorch_dataloader(
 
 
 
-# %% ../nbs/09_dataset_creation.ipynb 22
+# %% ../nbs/09_dataset_creation.ipynb 25
 def get_training_augmentation(
     IMAGE_HEIGHT: int = 592,
     IMAGE_WIDTH: int = 592,
 
 ):
     train_transform = [
-         A.RandomCrop(height=592, width=592),
+         A.RandomCrop(height=IMAGE_HEIGHT, width=IMAGE_WIDTH),
         A.Perspective(p=0.3),
         A.HorizontalFlip(p=0.5),
         A.VerticalFlip(p=0.5),
@@ -239,14 +249,38 @@ def get_training_augmentation(
 
 
 
-# %% ../nbs/09_dataset_creation.ipynb 23
+# %% ../nbs/09_dataset_creation.ipynb 26
 def get_validation_augmentation(
     IMAGE_HEIGHT: int = 592,
     IMAGE_WIDTH: int = 592,
 ):
-    return A.Compose([A.CenterCrop(height=592, width=592), ToTensorV2()])
+    return A.Compose([A.Resize(height=IMAGE_HEIGHT, width=IMAGE_WIDTH), ToTensorV2()])
 
-# %% ../nbs/09_dataset_creation.ipynb 26
+
+# %% ../nbs/09_dataset_creation.ipynb 29
+def create_mask_statistics(mask: np.ndarray, filename: str) -> dict:
+    """
+    Create statistics for a single mask.
+    
+    Args:
+    mask (np.ndarray): The predicted mask
+    filename (str): The filename of the original image
+    
+    Returns:
+    dict: A dictionary containing mask statistics
+    """
+    labeled_mask, num_labels = ndimage.label(mask > 0)
+    mask_areas = [np.sum(labeled_mask == i) for i in range(1, num_labels + 1)]
+    
+    return {
+        'Filename': filename,
+        'Number of Masks': num_labels,
+        'Pixel Counts': mask_areas,
+        'Average Mask Area': np.mean(mask_areas) if mask_areas else 0
+    }
+
+
+# %% ../nbs/09_dataset_creation.ipynb 31
 def visualize_batch(images, masks, num_images=4):
     fig, axs = plt.subplots(1,num_images, figsize=(5, num_images*5))
     for idx, (image, mask) in enumerate(zip(images, masks)):
@@ -258,3 +292,126 @@ def visualize_batch(images, masks, num_images=4):
         axs[idx].set_title('Image with Mask')
     plt.tight_layout()
     plt.show()
+
+# %% ../nbs/09_dataset_creation.ipynb 33
+def msk_crit(msk):
+    return True
+
+
+# %% ../nbs/09_dataset_creation.ipynb 34
+def create_batch_predictions(
+    model: torch.nn.Module,
+    image_path: str,
+    output_path: str,
+    failed_output_path: str,
+    batch_size: int = 32,
+    input_size: tuple = (128, 128),
+    device: str = 'cuda',
+    validation: bool = True,
+    threshold: float = 0.5,
+    overlay_save_path: str = None,
+	mask_criteria:str = None, # a string that is a function name in the global scope
+    post_process_func: Optional[Callable[[np.ndarray], np.ndarray]] = None,
+	num_workers:int = 4,
+	test_transform:Callable = None
+):
+    """
+    Create batch-wise prediction masks from a PyTorch model and save them in a folder.
+    
+    Args:
+    model (torch.nn.Module): The PyTorch model for segmentation
+    image_dir (str): Path to the directory containing input images
+    output_dir (str): Path to the directory where predicted masks that fulfill criteria will be saved
+    failed_output_dir (str): Path to the directory where predicted masks that do not fulfill criteria will be saved
+    batch_size (int): Batch size for processing
+    input_size (tuple): Size to which images will be resized
+    device (str): Device to run the model on ('cuda' or 'cpu')
+    validation (bool): Whether to shuffle the dataset or not
+    threshold (float): Threshold for converting mask probabilities to binary mask
+    overlay_save_path (str): Path to save overlay images
+    post_process_func (Optional[Callable[[np.ndarray], np.ndarray]]): Function to apply post-processing to the mask
+    """
+
+    if output_path is None:
+        output_path = Path(Path(image_path).parent, f'masks_{Path(image_path).name}')
+    if failed_output_path is None:
+        failed_output_path = Path(Path(image_path).parent, f'masks_failed_{Path(image_path).name}')
+    else: failed_output_path = Path(failed_output_path)
+    if overlay_save_path is None:
+        overlay_save_path = Path(Path(image_path).parent, 'masks_overlay')
+    else: overlay_save_path = Path(overlay_save_path)
+    output_path = Path(output_path)
+    output_path.mkdir(parents=True, exist_ok=True)
+    failed_output_path = Path(failed_output_path)
+    failed_output_path.mkdir(parents=True, exist_ok=True)
+    overlay_save_path = Path(overlay_save_path)
+    overlay_save_path.mkdir(parents=True, exist_ok=True)
+    
+    #test_transform = A.Compose([
+        #A.Resize(height=input_size[0], width=input_size[1]),
+        #ToTensorV2(),
+    #])
+    
+    dataset = InferenceDataset(image_dir=image_path, transform=test_transform)
+    if num_workers > 0:
+	    dataloader = DataLoader(
+               dataset, 
+               batch_size=batch_size, 
+               shuffle=not validation, 
+               num_workers=num_workers, 
+               pin_memory=True, 
+               persistent_workers=True, 
+               prefetch_factor=2)
+    else:
+        dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=not validation)
+    
+    model.to(device)
+    model.eval()
+    
+    mask_statistics = []
+    
+    with torch.no_grad():
+        for batch_images, batch_filenames in tqdm(dataloader, desc="Processing Batches"):
+            batch_images = batch_images.to(device)
+            batch_masks = model(batch_images)
+            
+            batch_masks = (batch_masks > threshold).float()
+            
+            for mask, filename in zip(batch_masks, batch_filenames):
+                mask = mask.cpu().numpy().squeeze(0)
+                mask = (mask * 255).astype(np.uint8)
+                
+                if post_process_func is not None:
+                    mask = post_process_func(mask)
+                
+                mask_image = Image.fromarray(mask)
+                
+                mask_crit = globals()[mask_criteria]
+                if mask_crit(mask):
+                    mask_image.save(Path(output_path, filename))
+                    mask_save_path = Path(output_path, filename)
+                else:
+                    mask_image.save(Path(failed_output_path, filename))
+                    mask_save_path = Path(failed_output_path, filename)
+                
+                if overlay_save_path:
+                    Path(overlay_save_path).mkdir(parents=True, exist_ok=True)
+                    overlay_mask_border_on_image(
+                        im_path=Path(image_path, filename),
+                        msk_path=mask_save_path,
+                        save_overlay_img_path=overlay_save_path,
+                        scale_=2,
+                        border_width=1,
+                        border_color=(0, 1, 0)
+                    )
+
+                mask_statistics.append(create_mask_statistics(mask, filename))
+
+    # Create DataFrame and save to CSV
+    df = pd.DataFrame(mask_statistics)
+    csv_path = Path(Path(output_path).parent) / 'mask_statistics.csv'
+    df.to_csv(csv_path, index=False)
+
+    print(f"Predicted masks saved in {output_path} and {failed_output_path}")
+    print(f"Mask statistics saved in {csv_path}")
+
