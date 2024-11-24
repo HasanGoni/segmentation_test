@@ -49,7 +49,7 @@ require_version("datasets>=1.8.0", "To fix: pip install -r examples/pytorch/imag
 class DataTrainingArguments:
 
 	dataset_name: Optional[str] = field(
-        default="cifar10", metadata={"help": "Name of a dataset from the datasets package"}
+        default=None, metadata={"help": "Name of a dataset from the datasets package"}
     )
 	dataset_config_name: Optional[str] = field(
         default=None, 
@@ -401,6 +401,6 @@ def main_():
 
 
 
-# %% ../../nbs/11_mae_pretraining.ipynb 59
+# %% ../../nbs/11_mae_pretraining.ipynb 61
 if __name__ == "__main__":
 	main_()
