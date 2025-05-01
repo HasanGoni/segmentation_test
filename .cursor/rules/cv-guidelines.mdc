@@ -1,0 +1,53 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Specialized Grayscale Image Processing Guidelines
+
+## Data Preprocessing for Scientific/Industrial Images
+- Normalize single-channel images: `mean=[0.485], std=[0.229]` or use domain-specific statistics
+- Use appropriate bit-depth handling (8-bit, 12-bit, 16-bit images)
+- Implement proper contrast enhancement techniques:
+  - Adaptive histogram equalization (CLAHE)
+  - Gamma correction
+  - Min-max normalization
+- Handle noise characteristics specific to imaging modality:
+  - Salt-and-pepper noise for X-ray
+  - Gaussian noise for microscopy
+  - Specular reflections for semiconductor inspection
+
+## Model Architecture Considerations
+- Input channels should be 1 for grayscale
+- Consider using larger initial filter sizes (7x7 or 9x9) for capturing fine details
+- Implement multi-scale analysis for varying feature sizes
+- Use appropriate padding for border regions (important for defect detection)
+
+## Task-Specific Guidelines
+
+### X-ray Image Processing
+- Implement proper exposure normalization
+- Handle varying contrast levels
+- Consider metal artifact reduction techniques
+- Use appropriate windowing functions
+
+### Microscopic Image Analysis
+- Handle varying illumination conditions
+- Implement scale-invariant feature detection
+- Consider phase contrast enhancement
+- Handle out-of-focus regions
+
+### Semiconductor Inspection
+- Implement proper alignment procedures
+- Handle reflective surface artifacts
+- Consider multi-angle lighting conditions
+- Implement die-to-die comparison techniques
+
+## Visualization and Quality Control
+- Use appropriate grayscale colormaps (avoid rainbow colormaps)
+- Implement proper contrast stretching for display
+- Use appropriate bit-depth for saving results
+- Consider domain-specific visualization needs:
+  - False coloring for feature emphasis
+  - Overlay capabilities for annotations
+  - Side-by-side comparison views

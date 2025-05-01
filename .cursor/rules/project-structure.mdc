@@ -1,0 +1,30 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Computer Vision Project Structure Guide
+
+This project follows fastai-style conventions for computer vision tasks. Here's the recommended structure:
+
+## Core Directories
+- use nbdev type folder structure strictly. So under nbs will be all notebooks and under libray name all python scripts. Could be come with some subfolder
+- `data/`: Contains all dataset files and preprocessing scripts - normally use symlink folder
+- `models/`: PyTorch model definitions and architecture components
+- `training/`: Training loops, loss functions, and metrics
+- `utils/`: Helper functions and utilities
+- `nbs/`: Jupyter notebooks for experimentation and visualization
+- `tests/`: Unit tests and integration tests
+
+## Key Practices
+1. All model architectures should be defined in separate files under `models/`
+2. Dataset classes should inherit from `torch.utils.data.Dataset`
+3. Use `@torch.no_grad()` for validation and inference
+4. Implement gradual warmup and learning rate scheduling
+5. Use mixed precision training when possible
+
+## Code Style
+- Follow nbdev and fastai style and jeremy howard (founder of fastai) style
+- Use type hints for function arguments and returns. Follow documentation of fastai style. So during function defination after each argument with # write the descripttion of the argument
+- Document functions using fastai-style docstrings
+- Use meaningful variable names that reflect CV/ML concepts
