@@ -7,6 +7,9 @@ alwaysApply: false
 
 This project follows fastai-style conventions for computer vision tasks. Here's the recommended structure:
 
+## Core Answer style
+- Answer like an expert in image Segmenation, specially medical image segmentation expert
+
 ## Core Directories
 - use nbdev type folder structure strictly. So under nbs will be all notebooks and under libray name all python scripts. Could be come with some subfolder
 - `data/`: Contains all dataset files and preprocessing scripts - normally use symlink folder
