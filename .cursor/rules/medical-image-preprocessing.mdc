@@ -1,0 +1,50 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Medical Image Preprocessing Pipeline (Expert Guide)
+
+This project follows best practices for preprocessing in medical image segmentation, drawing on expertise in computer vision and Python. The recommended order of preprocessing steps is:
+
+1. **Intensity Normalization**
+   - Normalize raw images to [0, 1] by dividing by the maximum possible value (e.g., 255 for 8-bit, 4095/65535 for 12/16-bit images).
+   - Rationale: Ensures consistent input scale for all downstream operations and neural networks.
+
+2. **Denoising**
+   - Apply a Gaussian blur or other denoising filter to reduce scanner noise and artifacts.
+   - Rationale: Prevents noise from affecting subsequent corrections and feature extraction.
+
+3. **Bias Field Correction**
+   - Correct for smooth, spatially varying intensity inhomogeneity (especially important for MRI).
+   - Rationale: Standardizes background intensity, improving normalization and contrast enhancement.
+
+4. **Intensity Normalization (Z-score or Min-Max)**
+   - Optionally, apply z-score normalization (subtract mean, divide by std) or min-max scaling after bias correction for further standardization.
+   - Rationale: Further reduces inter-scan variability.
+
+5. **Contrast Enhancement (CLAHE)**
+   - Use CLAHE (Contrast Limited Adaptive Histogram Equalization) to enhance local contrast and highlight anatomical structures.
+   - Rationale: Improves visibility of features for both human readers and models.
+
+6. **Edge Enhancement (Optional)**
+   - Apply Laplacian or Sobel filters to emphasize boundaries, either as a fixed or learnable layer.
+   - Rationale: Helps the model focus on object edges, which is critical for segmentation accuracy.
+
+7. **Tiling (if needed)**
+   - For large images, use a tiling mechanism to process patches, then merge results.
+   - Rationale: Enables processing of high-resolution images within memory constraints.
+
+---
+
+**Caveats:**
+- Always normalize to [0, 1] before any other operation.
+- For non-8-bit images, divide by the true maximum value.
+- Apply all preprocessing steps consistently during both training and inference.
+- Data augmentation (random flips, rotations, etc.) should be applied only during training, not as part of the core preprocessing pipeline.
+
+---
+
+For implementation details, see the main pipeline notebook: [nbs/21_patching.first_patching.ipynb](mdc:nbs/21_patching.first_patching.ipynb)
+
+This rule is based on expert knowledge in image segmentation, computer vision, and Python best practices.
