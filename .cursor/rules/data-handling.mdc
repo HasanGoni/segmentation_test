@@ -3,3 +3,50 @@ description:
 globs:
 alwaysApply: false
 ---
+# Scientific Image Data Handling
+
+## Data Loading and Storage
+```python
+class GrayscaleDataset(torch.utils.data.Dataset):
+    def __init__(self, root_dir, bit_depth=8):
+        self.bit_depth = bit_depth
+        self.max_val = 2**bit_depth - 1
+        
+    def __getitem__(self, idx):
+        # Handle different bit depths appropriately
+        img = self._load_image(idx) / self.max_val
+        return {'image': img, 'metadata': self._load_metadata(idx)}
+```
+
+## File Format Guidelines
+- Use lossless formats for raw data (TIFF, PNG)
+- Store metadata in standardized format (JSON, YAML)
+- Implement proper versioning for processed data
+- Consider compression strategies for large datasets
+
+## Data Augmentation Strategies
+### Appropriate for Scientific Images
+- Rotation (90°, 180°, 270°)
+- Flips (horizontal/vertical)
+- Small affine transformations
+- Controlled noise injection
+- Exposure/contrast variation
+
+### Avoid These Augmentations
+- Color jittering
+- Aggressive geometric transforms
+- Random cropping without context
+- Style transfer
+
+## Quality Assurance
+- Implement checksum verification
+- Validate bit depth consistency
+- Check for data corruption
+- Monitor statistical distributions
+- Track acquisition parameters
+
+## Metadata Management
+- Store acquisition parameters
+- Track preprocessing steps
+- Maintain calibration data
+- Document normalization factors
