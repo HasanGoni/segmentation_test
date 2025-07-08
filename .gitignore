@@ -151,3 +151,5 @@ checklink/cookies.txt
 .quarto
 
 /.quarto/
+*.pth
+events*

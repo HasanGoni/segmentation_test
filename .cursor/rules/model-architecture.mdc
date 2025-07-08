@@ -1,0 +1,62 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Scientific Image Model Architectures
+
+## Base Model Structure
+```python
+class ScientificImageModel(nn.Module):
+    def __init__(self, in_channels=1):
+        super().__init__()
+        self.initial_conv = nn.Conv2d(in_channels, 64, 
+                                    kernel_size=7, padding=3)
+        # Large receptive field for fine detail
+```
+
+## Architecture Guidelines
+
+### Input Layer Considerations
+- Use single-channel input for grayscale
+- Consider bit depth in normalization
+- Implement proper padding strategy
+- Handle varying image sizes
+
+### Feature Extraction
+- Use larger initial kernels (7x7, 9x9)
+- Implement multi-scale processing
+- Consider domain-specific features:
+  - Edge detection for semiconductor
+  - Blob detection for microscopy
+  - Density analysis for X-ray
+
+### Attention Mechanisms
+- Implement self-attention for global context
+- Use channel attention for feature refinement
+- Consider spatial attention for ROI focus
+- Implement cross-attention for reference comparison
+
+## Loss Functions
+### Primary Losses
+- MSE for regression tasks
+- Focal loss for imbalanced detection
+- SSIM loss for structural similarity
+- Perceptual loss for fine details
+- Boundary loss for refine boundary
+
+### Regularization
+- Total variation for smoothness
+- L1 for sparsity
+- Gradient penalty for stability
+
+## Evaluation Metrics
+- PSNR for image quality
+- SSIM for structural similarity
+- Forground IoU
+- Dice Loss
+- Domain-specific metrics:
+  - Defect detection rate
+  - False positive rate
+  - Resolution measurements
+  - Signal-to-noise ratio
